@@ -3,7 +3,6 @@ import ReactApp from 'babel!lego-starter-kit/src/ReactApp'
 export default class LupusApp extends ReactApp{
 
   init() {
-    this.config.projectsDir = '/Users/isuvorov/projects/remote/projects'
     super.init()
   }
   getModels() {

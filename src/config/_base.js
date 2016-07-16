@@ -10,6 +10,10 @@ const config = {
   port : process.env.PORT || 8080,
   // port : process.env.PORT || 3000,
   host: 'localhost',
+  
+  projectsDir: process.env.projectsDir || '/Users/isuvorov/projects/remote'
+
+
   db: {
     uri: 'mongodb://s2.mgbeta.ru:10098/lupus',
     options: {},
