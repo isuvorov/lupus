@@ -30,7 +30,7 @@ export default class LupusApp extends ReactApp{
       }).catch(res.err)
     })
 
-    this.app.get('/projects/refresh', (req, res) => {
+    this.app.all('/projects/refresh', (req, res) => {
       Project.findOne({name: req.query.name}).then(project => {
 
         project.refresh()
