@@ -16,15 +16,19 @@ export default class LupusApp extends ReactApp{
 
   useRoutes() {
     const Project = this.models.Project
+    console.log('useRoutes')
     this.app.get('/', (req, res) => {
+      console.log('get /')
       Project.find().then(projects => {
-        return res.json({projects})
-      })
+        console.log('Project.find then')
+        res.json({projects})
+        console.log('res.json')
+      }).catch(res.err)
     })
     this.app.get('/projects', (req, res) => {
       Project.find().then(projects => {
         return res.ok({projects})
-      })
+      }).catch(res.err)
     })
 
     this.app.get('/projects/refresh', (req, res) => {
