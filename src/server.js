@@ -1,9 +1,8 @@
 import 'babel-polyfill';
 
 import config from './config'
-import logger from '~/utils/logger'
+import logger from 'babel!lego-starter-kit/src/utils/logger'
 import App from '#/LupusApp'
-
 
 const ctx = {
   config,

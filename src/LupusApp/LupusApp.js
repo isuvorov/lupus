@@ -1,7 +1,4 @@
-import ReactApp from '~/ReactApp'
-// import ReactApp from '~/utils/AsyncRouter'
-
-// import getModels from './getModels'
+import ReactApp from 'babel!lego-starter-kit/src/ReactApp'
 
 export default class LupusApp extends ReactApp{
 
