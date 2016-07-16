@@ -1,6 +1,15 @@
 {
   "name": "lupus",
-  "version": "0.1.0",
+
+  "version": "1.0.0",
+  "description": "It MAY be Lupus",
+  "author": "isuvorov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isuvorov/lupus/issues"
+  },
+  "homepage": "https://github.com/isuvorov/lupus#readme",
+
   "private": true,
   "engines": {
     "node": ">=5.0 <7",

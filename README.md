@@ -1,34 +1,48 @@
-Inspirated by:
-* https://github.com/developit/express-es6-rest-api/
+# Lupus - simple admin panel for lazy programmers and nubs sysadmins
 
+![Alt Text](http://33.media.tumblr.com/531b30b26a04de9efb7acca04a51fbcf/tumblr_inline_mteafaOkEp1r80p9c.gif)
 
-http://expressjs.com/en/advanced/best-practice-security.html
-http://expressjs.com/en/advanced/best-practice-performance.html
-https://strongloop.com/strongblog/compare-node-js-logging-winston-bunyan/?_ga=1.261653007.308269509.1461336254
+### features
+- simple and lightweight
+- должно уметь запускать команды, как если бы мы сами запускали их из консоли
 
+например
+```
+git pull
+npm install
+npm start
+```
+или
+```
+rm -rf ./dist
+npm run build
+```
 
+### Принципы
+- обладать CLI
+- интерфейс Rest и Web
+- не зацикливаться на NodeJS и докере, так же просто должно деплоиться и пхп и статика с nginx
+- добавить кастомизации сисадминским технологиям, у которых её мало или они косорукие (например конфиги nginx)
+- взять лучшие практики из таск ранеров, например гульпа, возможно даже на нем и сбазироваться?
+- пойти по пути бема и вынести форматы в технологии например, чтобы было пох писать на js или bash или сочетать
 
-# Auth
-`Authorization Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1NzU1NjU0YWYxZjJmODA1N2JhM2U3NWUiLCJ1c2VybmFtZSI6ImFkbWluIiwibmFtZSI6IkFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNDY1MjU2Mzc2fQ._eEmsRtL_FuFOwVAtDf5GYio2YSvJwFB0lkSEMxkkbQ`
-or
-`?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1NzU1NjU0YWYxZjJmODA1N2JhM2U3NWUiLCJ1c2VybmFtZSI6ImFkbWluIiwibmFtZSI6IkFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNDY1MjU2Mzc2fQ._eEmsRtL_FuFOwVAtDf5GYio2YSvJwFB0lkSEMxkkbQ`
+### какие фичи мне хотелось бы
+- шаблонизация конфигов nginx, в одном месте меняешь порт, и он меняется во всех конфигах
+- наследование конфигов nginx, наследование от прото шаблона
+- все команды которые обычно пишутся в bash, вынести в классы NodeJS, чтобы можно было наследоваться и переопределять, так можно будет отнаследоваться от базового проекта и например наделать слегка кастомных воркеров
 
+### сахар фичи
+- легкое конфигурирование бекапов, например баз данных
+- перезагрузка приложений из веба
+- статус приложений из веба
+- нотификация когда плохо, эксепшены или падает, или еще чего, например кончается память или hdd
+- основные метрики системы вывести в веб, статусы приложений вывести в веб
+- сделать несколько шаблонов, например для nodejs, чтобы осталось только вставить ссылку на код
 
-"fatal" (60): The service/app is going to stop or become unusable now. An operator should definitely look into this soon.
-"error" (50): Fatal for a particular request, but the service/app continues servicing other requests. An operator should look at this soon(ish).
-"warn" (40): A note on something that should probably be looked at by an operator eventually.
-"info" (30): Detail on regular operation.
-"debug" (20): Anything else, i.e. too verbose to be included in "info" level.
-"trace" (10): Logging from external libraries used by your app or very detailed application logging.
-
-
-Что из себя представляет модуль
-Что такое мидлвара?
-Что такое контроллер?
-Универсальный роут?  Resourse ENDPOINT
-Возможность писать красивые АПИ ?
-
-
-Controller is middleware (req) => (new Promise())
-сам контроллер не должен принимать решение об отдаче данных клиенту
-Router is Express router
+сделать возможность вводить shell команды
+команд сделать *
+cli интерфейс
+дать возможность запускать команды из rest/web
+научить делать связку для заливки команд
+бекапы
+шаблонизация yml, nginx conf
