@@ -21,7 +21,9 @@
     "lego-starter-kit": "git+https://git@bitbucket.org/mgbeta/lego-starter-kit.git",
     "lodash": "^4.13.1",
     "react": "15.1.0",
-    "react-dom": "15.1.0"
+    "react-bootstrap": "^0.29.5",
+    "react-dom": "15.1.0",
+    "react-icons": "^2.2.1"
   },
   "devDependencies": {
     "@kadira/storybook": "^1.38.0",
@@ -168,7 +170,7 @@
     "deploy": "babel-node tools/run deploy",
     "render": "babel-node tools/run render",
     "start": "babel-node tools/run start",
-    "dev": "babel-node tools/run start  | ./bunyan -o short -l trace",
+    "dev": "projectsDir=/Users/isuvorov/projects/remote babel-node tools/run start  | ./bunyan -o short -l trace",
     "storybook": "start-storybook -p 9001",
     "install2": "find ./src/blocks/* -name package.json -maxdepth 1 -execdir npm install \\;"
   }

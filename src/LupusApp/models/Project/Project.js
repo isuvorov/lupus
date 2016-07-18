@@ -12,9 +12,15 @@ export function getSchema(ctx) {
     name: {
       type: String,
     },
+    info: {
+      type: Object,
+    },
     repos: {
       type: Object,
-    }
+    },
+    files: {
+      type: Object,
+    },
   },
   {
     timestamps: true
@@ -147,7 +153,7 @@ export function getSchema(ctx) {
       ctx.log.error(err)
       return false
     }
-    
+
     ctx.log.verbose('refresh complete')
     return true
   }

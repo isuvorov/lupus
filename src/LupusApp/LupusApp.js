@@ -15,30 +15,48 @@ export default class LupusApp extends ReactApp{
 
   useRoutes() {
     const Project = this.models.Project
-    console.log('useRoutes')
     this.app.get('/', (req, res) => {
-      console.log('get /')
+      return res.send(this.renderHtml(<div>LUPUS</div>))
+    })
+
+
+
+    this.app.get('/projects', (req, res) => {
       Project.find().then(projects => {
-        console.log('Project.find then')
-        res.json({projects})
-        console.log('res.json')
+
+
+        return res.send(this.renderHtml(
+          <div>
+             Проекты
+             <table>
+              <tr>
+
+              </tr>
+              
+             </table>
+          </div>
+        ));
+
+        return res.ok({projects})
       }).catch(res.err)
     })
-    this.app.get('/projects', (req, res) => {
+
+
+    this.app.get('/api/v1/projects', (req, res) => {
       Project.find().then(projects => {
         return res.ok({projects})
       }).catch(res.err)
     })
 
+
+
+
     this.app.all('/projects/refresh', (req, res) => {
       Project.findOne({name: req.query.name}).then(project => {
-
         project.refresh()
-        return res.ok({project})
+        return res.ok(true)
       }).catch(res.err)
     })
-
-
   }
   useDefaultRoute() {
     this.app.use('*', (req, res) => res.send(this.renderHtml(<div>renderComponent</div>)))

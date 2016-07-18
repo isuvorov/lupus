@@ -1,7 +1,7 @@
 import {configure, storiesOf, action } from '@kadira/storybook';
 import React, { Component } from 'react';
-import StyleWrapper from '$/utils/StyleWrapper';
-import StoryWrapper from '$/utils/StoryWrapper';
+import StyleWrapper from '~/utils/StyleWrapper';
+import StoryWrapper from '~/utils/StoryWrapper';
 
 function loadStories() {
 
