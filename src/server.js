@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+require('babel-runtime/core-js/promise').default = require('bluebird');
 
 import config from './config'
 import logger from 'babel!lego-starter-kit/src/utils/logger'

@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import fs from 'fs'
-// import rr from 'react-routing/src/resolve'
-// import Repo from 'git-repository/src/Repository'
-const Repo = require('babel!git-repository/src/Repository').default
-const cp = require('babel!git-repository/src/utils/cp').default
+import Repo from 'babel!git-repository/src/Repository'
+import cp from 'babel!git-repository/src/utils/cp'
+
+
 
 export function getSchema(ctx) {
   const mongoose = ctx.db
@@ -18,20 +18,31 @@ export function getSchema(ctx) {
     repos: {
       type: Object,
     },
-    files: {
-      type: Object,
-    },
+    tasks: [{
+      // type: Object,
+      name: String,
+      type: {
+        type: String,
+        default: 'sh'
+      },
+      content: String,
+      // type: Object,
+    }],
+    files: [{
+      name: String,
+      content: String,
+    }],
   },
   {
     timestamps: true
   })
 
-
-  schema.methods.createDir = function(dir) {
-    try{
-      fs.mkdirSync(this.getDir());
-    } catch(e){}
-  }
+  //
+  // schema.methods.createDir = function(dir) {
+  //   try{
+  //     fs.mkdirSync(this.getDir());
+  //   } catch(e){}
+  // }
 
   schema.methods.getDir = function(path) {
     if(path){
@@ -117,7 +128,6 @@ export function getSchema(ctx) {
   }
 
   schema.methods.refresh = async function() {
-    this.createDir()
 
     // const isChanged = this.reposRefresh()
     // if (!isChanged) return false
@@ -160,8 +170,48 @@ export function getSchema(ctx) {
   schema.methods.toJSON = function() {
     return Object.assign({}, this.toObject(), {
       dir: this.getDir(),
-      files: this.getFiles(this.getDir())
+      // files: this.getFiles(this.getDir())
     })
+  }
+
+  schema.methods.syncFs = async function() {
+    const writeFile = Promise.promisify(fs.writeFile)
+    const mkdir2 = Promise.promisify(fs.mkdir)
+    const mkdir = (dir) => mkdir2(dir).catch(e => {
+      if (e.code !== 'EEXIST') throw e
+    })
+
+    await mkdir(this.getDir())
+    await mkdir(this.getDir('logs'))
+    await mkdir(this.getDir('tasks'))
+
+    const tasks = this.tasks || []
+    const promises1 = _.map(tasks,  task => {
+      return writeFile(this.getDir(`tasks/${task.name}.${task.type}`), task.content)
+    })
+    await Promise.all(promises1)
+
+    const files = this.files || []
+    const promises2 = _.map(files,  file => {
+      return writeFile(this.getDir(`${file.name}`), file.content)
+    })
+    await Promise.all(promises2)
+
+    return {
+      name: this.name,
+      dit: this.getDir(),
+      tasks,
+    }
+  }
+
+
+
+  schema.methods.runTask = function(task) {
+    console.log()
+    return {
+      // qwe: 123,
+      task,
+    }
   }
 
 

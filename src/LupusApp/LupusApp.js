@@ -1,4 +1,5 @@
 import ReactApp from 'babel!lego-starter-kit/src/ReactApp'
+import Api from './Api'
 
 export default class LupusApp extends ReactApp{
 
@@ -16,50 +17,15 @@ export default class LupusApp extends ReactApp{
   useRoutes() {
     const Project = this.models.Project
     this.app.get('/', (req, res) => {
-      return res.send(this.renderHtml(<div>LUPUS</div>))
+      return res.send(this.renderHtml(<div>Lupus home</div>))
     })
+    this.app.use('/api', Api(this))
+    this.useStaticPublic(__dirname + '/../../public')
 
 
-
-    this.app.get('/projects', (req, res) => {
-      Project.find().then(projects => {
-
-
-        return res.send(this.renderHtml(
-          <div>
-             Проекты
-             <table>
-              <tr>
-
-              </tr>
-              
-             </table>
-          </div>
-        ));
-
-        return res.ok({projects})
-      }).catch(res.err)
-    })
-
-
-    this.app.get('/api/v1/projects', (req, res) => {
-      Project.find().then(projects => {
-        return res.ok({projects})
-      }).catch(res.err)
-    })
-
-
-
-
-    this.app.all('/projects/refresh', (req, res) => {
-      Project.findOne({name: req.query.name}).then(project => {
-        project.refresh()
-        return res.ok(true)
-      }).catch(res.err)
-    })
   }
   useDefaultRoute() {
-    this.app.use('*', (req, res) => res.send(this.renderHtml(<div>renderComponent</div>)))
+    this.app.use('*', (req, res) => res.err(this.errors.e404('Route not found')))
   }
 
 }

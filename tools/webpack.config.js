@@ -59,6 +59,7 @@ const config = {
         loader: 'babel-loader',
         exclude: /qwe/,
         include: [
+          path.resolve(__dirname, '../node_modules/git-repository/src'),
           path.resolve(__dirname, '../node_modules/lego-starter-kit/src'),
           path.resolve(__dirname, '../node_modules/react-routing/src'),
           path.resolve(__dirname, '../src'),
