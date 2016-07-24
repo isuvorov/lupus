@@ -184,6 +184,7 @@ const config = {
     root: path.resolve(__dirname, '../src'),
     alias: {
       '#': path.resolve(__dirname, '../src'),
+      'lupus': path.resolve(__dirname, '../src'),
       '~': path.resolve(__dirname, '../node_modules/lego-starter-kit/src'),
     },
     modulesDirectories: ['node_modules'],

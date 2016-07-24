@@ -1,4 +1,5 @@
 import App from './App'
+/* eslint-disable */
 const project = {
   "_id": "578752bbf1f2f80ae6e18765",
   repos: {
@@ -19,9 +20,14 @@ const project = {
     "foo": "bar"
   }
 }
+/* eslint-enable */
 
 module.exports = ({ storiesOf, action }) => {
-  const projects = [Object.assign({}, project, {name:'chat.mgbeta.ru'}), Object.assign({}, project, {name:'biz-accord.ru'}), project]
+  const projects = [
+    // Object.assign({}, project, { name: 'chat.mgbeta.ru' }),
+    // Object.assign({}, project, { name: 'biz-accord.ru' }),
+    project,
+  ]
   return storiesOf('App', module)
     .add('Default', () => {
       return <App

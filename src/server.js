@@ -3,11 +3,11 @@ require('babel-runtime/core-js/promise').default = require('bluebird');
 
 import config from './config'
 import logger from 'babel!lego-starter-kit/src/utils/logger'
-import App from '#/LupusApp'
+import App from './LupusApp'
 
 const ctx = {
   config,
-  log: logger({name: 'app'})
+  log: logger({name: 'app'}),
 }
 const app = new App(ctx)
 app.run().then((app) => {

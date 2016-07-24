@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import { Component, PropTypes } from 'react';
 import { debounce } from 'lodash';
+
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -14,6 +15,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
+
 import CloseIcon from 'react-icons/lib/fa/close';
 import SaveIcon from 'react-icons/lib/fa/check';
 import AddIcon from 'react-icons/lib/fa/plus';
@@ -23,51 +25,37 @@ import cssModules from '~/utils/CSSModules';
 
 @cssModules(require('./App.styl'))
 export default class App extends Component {
+  static propTypes = {
+    projects: PropTypes.object,
+  }
   constructor(props) {
     super(props);
     this.state = {
       active: 0,
       project: this.props.projects[0],
     };
-    this.handleChangeValue = this.handleChangeValue.bind(this)
-
+    // this.handleChangeValue = this.handleChangeValue.bind(this)
+    this.setActive = this.setActive.bind(this)
   }
-  setActive = (active) => {
+  setActive(e) {
+    // this.setState({ active });
+    console.log(21312312312, e);
+    const active = 1
     const project = this.props.projects[active] || {};
     this.setState({ active, project });
   }
-  // handleChangeValue = (object, key) => debounce((e) => {
-  //   console.log('handleChangeValue');
-  //   const project = this.state.project;
-  //   project[object][key] = e.target.value;
-  //   this.setState({ project });
-  // }, 250);
-
-
-
-  handleChangeValue(e) {
-    e.target['kek'] = 'general';
-    console.log(e.target.kek);
-    // const project = this.state.project;
-    // // e.target.data
-    // project[object][key] = e.target.value;
-    // this.setState({ project });
+  renderProjectItems() {
+    return this.props.projects.map((prj, index) => (
+      <ListGroupItem
+        onClick={this.setActive}
+        active={index === this.state.active}
+      >
+        {prj.name}
+      </ListGroupItem>
+    ))
   }
-  // debounce((e) => {
-  //   console.log('handleChangeValue');
-  //   const project = this.state.project;
-  //   project[object][key] = e.target.value;
-  //   this.setState({ project });
-  // }, 250);
+  handleChangeKey(){
 
-
-  handleChangeKey = (object, key) => (e) => {
-    console.log(e.target);
-    console.log('handleChangeKey');
-    const project = this.state.project;
-    project[object][e.target.value] = project[object][key];
-    delete project[object][key];
-    this.setState({ project });
   }
   render() {
     const panelHeader = (
@@ -87,28 +75,52 @@ export default class App extends Component {
       borderColor: '#ddd',
       padding: '10px 0',
     };
-    const { project, active } = this.state;
+    const { project } = this.state;
     return (
       <div styleName="root">
         <Header />
-        <Button onClick={debounce(() => {
+        {/*<Button onClick={debounce(() => {
           console.log('CLICK');
-        }, 600)}>CLICK</Button>
+        }, 600)}>CLICK</Button>*/}
         <Grid>
           <Row>
             <Col md={4}>
               <ListGroup>
-                <For each="prj" index="index" of={ this.props.projects}>
-                  <ListGroupItem
-                    onClick={this.setActive.bind(this, index)}
-                    active={index === active}>
-                    {prj.name}
-                  </ListGroupItem>
-                </For>
+                {this.renderProjectItems()}
                 <Button style={projectButton} block><AddIcon /> Добавить проект</Button>
               </ListGroup>
             </Col>
             <Col md={8}>
+              <textarea style={{width:'100%'}} rows={5}>
+                {JSON.stringify(this.state.project)}
+              </textarea>
+              <Table responsive>
+                {Object.keys(project.general).map((key, i) => (
+                  <tr key={`gen-${i}`}>
+                    <td style={{ width: '30%' }}>
+                      <FormControl
+                        type="text"
+                        object="general"
+                        key={key}
+                        placeholder="Введите название"
+                        onChange={this.handleChangeKey}
+                        defaultValue={key}
+                      />
+                    </td>
+                    <td style={{ width: '70%' }}>
+                      <FormControl
+                        type="text"
+                        object="general"
+                        key={key}
+                        ref={{ object: 'general', key }}
+                        placeholder="Введите значение"
+                        onChange={this.handleChangeValue}
+                        defaultValue={project.general[key]}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </Table>
               <Panel header={panelHeader}>
                 <Tabs defaultActiveKey={0} id="uncontrolled-tab-example">
                   <Tab eventKey={0} title="Информация">
@@ -148,7 +160,7 @@ export default class App extends Component {
                                 key={key}
                                 placeholder="Введите название"
                                 onChange={this.handleChangeKey}
-                                value={key}
+                                defaultValue={key}
                               />
                             </td>
                             <td style={{ width: '70%' }}>

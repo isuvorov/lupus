@@ -1,8 +1,7 @@
 import ReactApp from 'babel!lego-starter-kit/src/ReactApp'
-import Api from './Api'
+import api from './api'
 
-export default class LupusApp extends ReactApp{
-
+export default class LupusApp extends ReactApp {
   init() {
     super.init()
   }
@@ -13,19 +12,15 @@ export default class LupusApp extends ReactApp{
     }
     return Object.assign(superModels, models)
   }
-
   useRoutes() {
-    const Project = this.models.Project
+    // const Project = this.models.Project
     this.app.get('/', (req, res) => {
       return res.send(this.renderHtml(<div>Lupus home</div>))
     })
-    this.app.use('/api', Api(this))
+    this.app.use('/api', api(this))
     this.useStaticPublic(__dirname + '/../../public')
-
-
   }
   useDefaultRoute() {
     this.app.use('*', (req, res) => res.err(this.errors.e404('Route not found')))
   }
-
 }

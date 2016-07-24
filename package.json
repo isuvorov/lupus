@@ -17,13 +17,15 @@
     "babel-polyfill": "6.9.1",
     "babel-runtime": "6.9.2",
     "body-parser": "1.15.1",
+    "core-decorators": "^0.12.3",
     "git-repository": "git+https://github.com/isuvorov/git-repository.git",
     "lego-starter-kit": "git+https://git@bitbucket.org/mgbeta/lego-starter-kit.git",
     "lodash": "^4.13.1",
     "react": "15.1.0",
     "react-bootstrap": "^0.29.5",
     "react-dom": "15.1.0",
-    "react-icons": "^2.2.1"
+    "react-icons": "^2.2.1",
+    "react-link-state": "^0.1.2"
   },
   "devDependencies": {
     "@kadira/storybook": "^1.38.0",

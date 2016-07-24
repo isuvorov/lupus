@@ -1,3 +1,4 @@
 {
+  "browser": "LupusApp.client.js",
   "main": "LupusApp.js"
 }
