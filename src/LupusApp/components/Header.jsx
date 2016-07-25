@@ -6,7 +6,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 
 export default function Header() {
   return (
-    <Navbar staticTop>
+    <Navbar inverse fixedTop>
       <Navbar.Header>
         <Navbar.Brand>
           <a href="#">Lupus</a>

@@ -1,0 +1,69 @@
+body {
+  padding-top: 50px;
+}
+.panel{
+  border-radius: 3px;
+  border: 1px solid #eee;
+  background: white;
+}
+.addproject {
+  margin: 10px 20px;
+}
+:global .sidebar {
+  position: fixed !important;
+  background-color: #e7e7e7;
+  top: 50px;
+  bottom: 0;
+  :global .nav>li>a {
+    border-radius: 0;
+    font-weight: bold !important;
+    color: #505050 !important;
+  }
+  :global .nav>li>a:focus,
+  :global .nav>li>a:hover {
+    text-decoration: none !important;
+    background-color: #cccccc !important;
+  }
+  :global .nav-pills>li.active>a,
+  :global .nav-pills>li.active>a:focus,
+  :global .nav-pills>li.active>a:hover {
+    color: #fff !important;
+    background-color: #484848 !important;
+  }
+}
+.fullish {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.inner {
+  padding-top: 30px;
+}
+.card{
+  margin: 10px 0;
+  pre {
+    border-radius: 3px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    textarea {
+      resize: vertical;
+    }
+  }
+}
+button:focus{
+  outline: none !important;
+}
+a:focus{
+  outline: none !important;
+}
+
+.projectButton {
+  margin: 10px;
+}
+
+
+:global .panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
