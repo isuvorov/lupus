@@ -1,48 +1,4 @@
-import EditorBemjsonSegment from './EditorBemjsonSegment';
-
-import { createStore } from 'redux'
-import { Provider, connect } from 'react-redux'
-import { Component } from 'react'
-
-import reducer from '../reducer';
-
-@connect(
-  state => ({
-    bemjson: state.bemjson,
-  }),
-  dispatch => ({
-    dispatch,
-  })
-)
-class Test extends Component {
-  render() {
-    this.props.changeUserName
-    return <div>
-      <pre style={{maxWidth:500}}>{JSON.stringify(this.props)}</pre>
-      <pre style={{maxWidth:500}}>{JSON.stringify(this.state)}</pre>
-      <EditorBemjsonSegment
-        bemjson={this.props.bemjson}
-        dispatch={this.props.dispatch}
-      />
-    </div>
-  }
-}
-class TestWrapper extends Component {
-  render() {
-    return <div>
-    <table>
-    <tr>
-    <td>
-      <Test/>
-    </td>
-    <td>
-      <Test/>
-    </td>
-    </tr>
-    </table>
-    </div>
-  }
-}
+import EditorBemjson from './EditorBemjson';
 
 const bemjson = {
   int: 123,
@@ -134,33 +90,53 @@ const largeBemjson = {
     },
   ],
 }
-
+const project = {
+  "_id": "578df9ccf1f2f80c3cdf7b9d",
+  "base": "nodejs",
+  "name": "bratishka",
+  "files": [
+    {
+      "name": "docker-compose.yml",
+      "content": "version: '2'\nservices:\n  app:\n    image: node:5.11.1\n    working_dir: /app/src\n    command: /bin/bash -c \"npm start\"\n    volumes:\n        - ./app:/app/src\n    ports:\n      - 127.0.0.1:8050:8080\n    environment:\n      TOKEN: 139139425:AAFDc-RHpEKxH7etQr92o5MkCmz7HaMKCos"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "init",
+      "content": "git clone git@bitbucket.org:natavts/telegrambot.git app",
+      "type": "sh"
+    }, {
+      "name": "refresh",
+      "content": "cd src\ngit pull\ndocker-compose run app npm install --no-progress\ndocker-compose run app npm run build",
+      "type": "sh"
+    }, {
+      "name": "run",
+      "content": "docker-compose up",
+      "type": "sh"
+    }
+  ]
+}
 module.exports = ({ storiesOf, action }) => {
-  return storiesOf('EditorBemjsonSegment', module)
+  return storiesOf('EditorBemjson', module)
     .add('Default', () => {
-      return <EditorBemjsonSegment
+      return <EditorBemjson
         bemjson={bemjson}
-        dispatch={action('dispatch')}
         onChange={action('onChange')}
         onSubmit={action('onSubmit')}
       />
     })
-    .add('Redux', () => {
-      const store = createStore(reducer, {bemjson})
-      return <Provider store={store}>
-        <Test />
-      </Provider>
+    .add('project', () => {
+      return <EditorBemjson
+        bemjson={project}
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
     })
-    .add('Redux 2 admin', () => {
-      const store = createStore(reducer, {bemjson})
-      return <Provider store={store}>
-        <TestWrapper />
-      </Provider>
-    })
-    .add('Redux largeBemjson', () => {
-      const store = createStore(reducer, {bemjson: largeBemjson})
-      return <Provider store={store}>
-        <Test />
-      </Provider>
+    .add('largeBemjson', () => {
+      return <EditorBemjson
+        bemjson={largeBemjson}
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
     })
 }

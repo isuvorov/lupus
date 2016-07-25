@@ -20,7 +20,6 @@ export default class EditorBemjsonSegment extends Component {
     bemjson: PropTypes.any.isRequired,
     path: PropTypes.array,
     dispatch: PropTypes.func,
-    // schema: PropTypes.any
   }
 
   constructor(props) {
@@ -30,11 +29,6 @@ export default class EditorBemjsonSegment extends Component {
       value: '',
       type: 'string',
     }
-    // if (this.getType() === 'simple') {
-    //   this.state.val = this.props.bemjson;
-    // }
-
-    // this.handleChangeDebounced = _.debounce(this.handleChangeDebounced, 1000)
   }
 
 
@@ -206,6 +200,7 @@ export default class EditorBemjsonSegment extends Component {
         });
       }
 
+      // ЛЮБОЕ СЛОВО, ТЕЛО СЕГМЕНТА
       return <tbody key={key}>
         <tr>
           <td>
@@ -261,10 +256,7 @@ export default class EditorBemjsonSegment extends Component {
         content = this.renderSimple();
         break;
     }
-    // console.log('render', this.getType());
 
     return <div className="EditorBemjsonSegment">{content}</div>
   }
 }
-
-// ReactMixin(EditorBemjsonSegment.prototype, LinkedStateMixin);
