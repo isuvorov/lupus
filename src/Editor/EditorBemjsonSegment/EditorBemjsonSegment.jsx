@@ -14,6 +14,49 @@ import EditorBemjsonModal from './EditorBemjsonModal'
 import InputDebounce from './InputDebounce'
 
 
+class ObjectPropCreator extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      key: '1',
+      value: '',
+      type: 'string',
+    }
+  }
+
+  @autobind
+  handleClick() {
+    this.props.onSubmit(this.state)
+    this.setState({
+      key: '',
+      value: '',
+    })
+  }
+
+  render() {
+    return <Row>
+     <Col xs={3}>
+      <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control" />
+     </Col>
+     <Col xs={6}>
+      <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control" />
+     </Col>
+     <Col xs={2}>
+      <input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control" />
+     </Col>
+     <Col xs={1}>
+      <Button onClick={this.handleClick} bsStyle="primary" bsSize="small">
+        <IconPlus />
+      </Button>
+     </Col>
+   </Row>
+  }
+}
+
 export default class EditorBemjsonSegment extends Component {
 
   static propTypes = {
@@ -24,11 +67,11 @@ export default class EditorBemjsonSegment extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      key: '',
-      value: '',
-      type: 'string',
-    }
+    // this.state = {
+    //   key: '123123',
+    //   value: '',
+    //   type: 'string',
+    // }
   }
 
 
@@ -44,7 +87,6 @@ export default class EditorBemjsonSegment extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // return false
-    //
     if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true
     if (JSON.stringify(nextProps.bemjson) === JSON.stringify(this.props.bemjson)) return false
     console.log(JSON.stringify(nextProps.bemjson) !== JSON.stringify(this.props.bemjson), nextProps.bemjson , this.props.bemjson);
@@ -137,37 +179,18 @@ export default class EditorBemjsonSegment extends Component {
       );
     })
 
-    const push = () => {
+    const push = (state) => {
       this.props.dispatch({
         type: 'editorSet',
-        path: this.getPath(this.state.key),
-        value: this.state.val,
+        path: this.getPath(state.key),
+        value: state.value,
       });
-      this.setState({
-        key: '',
-        value: '',
-      })
     }
 
     return <div className="well">
       {childs}
       <hr />
-      <Row>
-         <Col xs={3}>
-          <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control" />
-         </Col>
-         <Col xs={6}>
-          <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control" />
-         </Col>
-         <Col xs={2}>
-          <input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control" />
-         </Col>
-         <Col xs={1}>
-          <Button onClick={push} bsStyle="primary" bsSize="small">
-            <IconPlus />
-          </Button>
-         </Col>
-       </Row>
+      <ObjectPropCreator onSubmit={push} />
     </div>
   }
 

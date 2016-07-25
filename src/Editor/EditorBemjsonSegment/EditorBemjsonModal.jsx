@@ -23,21 +23,30 @@ export default class EditorBemjsonModal extends Component {
     this.state = {
       showModal: false,
       value: props.value,
+      str: JSON.stringify(props.value),
     }
   }
 
   componentWillReceiveProps(props) {
     this.setState({
-      value: props.value
+      value: props.value,
+      str: JSON.stringify(props.value),
     });
   }
 
   @autobind
   saveAndClose() {
-    this.setState({ showModal: false }, () => {
-      const value = JSON.parse(this.state.value)
-      this.props.onChange(value)
-    });
+    try{
+      const value = JSON.parse(this.state.str)
+
+      this.setState({ showModal: false }, () => {
+        this.props.onChange(value)
+      });
+    }catch(e){
+      console.log(e);
+      alert('JSON ERROR')
+    }
+
   }
 
   @autobind
@@ -51,9 +60,10 @@ export default class EditorBemjsonModal extends Component {
   }
 
   @autobind
-  hangleChange(e) {
+  handleChange(e) {
+    console.log('e.target.value', e.target.value);
     this.setState({
-      value: this.parse(e.target.value)
+      str: e.target.value
     })
   }
 
@@ -83,7 +93,7 @@ export default class EditorBemjsonModal extends Component {
             type="textarea"
             label="Text Area"
             placeholder="textarea"
-            value={this.stringify(this.state.value)}
+            value={this.state.str}
             onChange={this.handleChange}
           />
         </Modal.Body>
