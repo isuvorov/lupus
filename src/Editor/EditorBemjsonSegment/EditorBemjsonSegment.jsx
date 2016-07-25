@@ -11,6 +11,8 @@ import IconArrowUp from 'react-icons/lib/fa/arrow-up'
 import IconArrowDown from 'react-icons/lib/fa/arrow-down'
 
 import EditorBemjsonModal from './EditorBemjsonModal'
+import InputDebounce from './InputDebounce'
+
 
 export default class EditorBemjsonSegment extends Component {
 
@@ -25,26 +27,39 @@ export default class EditorBemjsonSegment extends Component {
     super(props)
     this.state = {
       key: '',
-      val: '',
+      value: '',
       type: 'string',
     }
-    if (this.getType() === 'simple') {
-      this.state.val = this.props.bemjson;
-    }
+    // if (this.getType() === 'simple') {
+    //   this.state.val = this.props.bemjson;
+    // }
 
-    this.handleChangeDebounced = _.debounce(this.handleChangeDebounced, 1000)
+    // this.handleChangeDebounced = _.debounce(this.handleChangeDebounced, 1000)
   }
 
 
-  componentWillReceiveProps(nextProps) {
-    if (this.getType() === 'simple') {
-      this.setState({
-        val: nextProps.bemjson,
-      });
-    }
-    return false
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.getType() === 'simple') {
+  //     this.setState({
+  //       val: nextProps.bemjson,
+  //     });
+  //   }
+  //   return false
+  // }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // return false
+    //
+    if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true
+    if (JSON.stringify(nextProps.bemjson) === JSON.stringify(this.props.bemjson)) return false
+    console.log(JSON.stringify(nextProps.bemjson) !== JSON.stringify(this.props.bemjson), nextProps.bemjson , this.props.bemjson);
+    // console.log(nextProps.bemjson !== this.props.bemjson, nextProps.bemjson , this.props.bemjson);
+    return true
+    // return JSON.stringify(nextProps.bemjson) !== JSON.stringify(this.props.bemjson)
   }
 
+  @debounce(300)
   handleChangeDebounced(value) {
     this.props.dispatch({
       type: 'editorSet',
@@ -70,22 +85,19 @@ export default class EditorBemjsonSegment extends Component {
   }
 
   renderSimple() {
-    const handleChangeDebounced = e => {
-      this.handleChangeDebounced(e.target.value)
-    }
-    const handleChange = e => {
+    const handleChange = value => {
       this.props.dispatch({
         type: 'editorSet',
         path: this.props.path,
-        value: e.target.value,
+        value,
       });
     }
     return <div>
-      <input
-        data-path={this.props.path.join('/')}
+      <InputDebounce
         type="text"
         className="form-control"
-        value={this.props.bemjson}
+        ref="input"
+        defaultValue={this.props.bemjson}
         onChange={handleChange}
       />
     </div>
@@ -102,6 +114,7 @@ export default class EditorBemjsonSegment extends Component {
         });
       }
 
+      // change in modal
       const onChange = (bemjson) => {
         console.log('onChange', bemjson);
         this.props.dispatch({
@@ -116,7 +129,7 @@ export default class EditorBemjsonSegment extends Component {
           <label className=" control-label">
             {key}
             &nbsp;
-            <EditorBemjsonModal onChange={onChange} bemjson={value} path={path}>
+            <EditorBemjsonModal onChange={onChange} value={value} path={path}>
               <IconCode />
             </EditorBemjsonModal>
             &nbsp;
@@ -138,7 +151,7 @@ export default class EditorBemjsonSegment extends Component {
       });
       this.setState({
         key: '',
-        val: '',
+        value: '',
       })
     }
 
@@ -150,7 +163,7 @@ export default class EditorBemjsonSegment extends Component {
           <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control" />
          </Col>
          <Col xs={6}>
-          <input valueLink={linkState(this, 'val')}  placeholder="Value"  bsSize="small" className="form-control" />
+          <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control" />
          </Col>
          <Col xs={2}>
           <input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control" />

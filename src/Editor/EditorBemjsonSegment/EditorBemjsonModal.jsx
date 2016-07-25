@@ -22,17 +22,22 @@ export default class EditorBemjsonModal extends Component {
     super(props)
     this.state = {
       showModal: false,
-      bemjson: props.bemjson,
+      value: props.value,
     }
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({
+      value: props.value
+    });
   }
 
   @autobind
   saveAndClose() {
-    const bemjson = JSON.parse(this.state.bemjson)
     this.setState({ showModal: false }, () => {
-      this.props.onChange(bemjson)
+      const value = JSON.parse(this.state.value)
+      this.props.onChange(value)
     });
-    // this.close()
   }
 
   @autobind
@@ -43,6 +48,21 @@ export default class EditorBemjsonModal extends Component {
   @autobind
   open() {
     this.setState({ showModal: true });
+  }
+
+  @autobind
+  hangleChange(e) {
+    this.setState({
+      value: this.parse(e.target.value)
+    })
+  }
+
+  stringify(value) {
+    return JSON.stringify(value)
+  }
+
+  parse(value) {
+    return JSON.parse(value)
   }
 
   render() {
@@ -63,14 +83,9 @@ export default class EditorBemjsonModal extends Component {
             type="textarea"
             label="Text Area"
             placeholder="textarea"
-            ref="bemjson"
-            //valueLink={linkState(this, 'bemjson')}
-            defaultValue={JSON.stringify(this.state.bemjson)}
+            value={this.stringify(this.state.value)}
+            onChange={this.handleChange}
           />
-          {/*props
-          <textarea value={JSON.stringify(this.props.bemjson)} />
-          state
-          <textarea value={JSON.stringify(this.state.bemjson)} />*/}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.close}>Отменить</Button>

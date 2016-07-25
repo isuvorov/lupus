@@ -17,13 +17,28 @@ import reducer from '../reducer';
 class Test extends Component {
   render() {
     return <div>
-      Test
       <pre style={{maxWidth:500}}>{JSON.stringify(this.props)}</pre>
       <pre style={{maxWidth:500}}>{JSON.stringify(this.state)}</pre>
       <EditorBemjsonSegment
         bemjson={this.props.bemjson}
         dispatch={this.props.dispatch}
       />
+    </div>
+  }
+}
+class TestWrapper extends Component {
+  render() {
+    return <div>
+    <table>
+    <tr>
+    <td>
+      <Test/>
+    </td>
+    <td>
+      <Test/>
+    </td>
+    </tr>
+    </table>
     </div>
   }
 }
@@ -133,6 +148,12 @@ module.exports = ({ storiesOf, action }) => {
       const store = createStore(reducer, {bemjson})
       return <Provider store={store}>
         <Test />
+      </Provider>
+    })
+    .add('Redux 2 admin', () => {
+      const store = createStore(reducer, {bemjson})
+      return <Provider store={store}>
+        <TestWrapper />
       </Provider>
     })
     .add('Redux largeBemjson', () => {
