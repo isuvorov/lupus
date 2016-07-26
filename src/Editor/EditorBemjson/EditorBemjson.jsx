@@ -43,10 +43,15 @@ export default class EditorBemjson extends Component {
     this.state = {
     }
     this.store = createStore(reducer, {bemjson: this.props.bemjson})
-    this.store.subscribe(() => {
+    this.unsubscribe = this.store.subscribe(() => {
       this.props.onChange(this.store.getState().bemjson)
-      // console.log('subscribe', this.store.getState().bemjson);
-      // onSubmit={this.props.onSubmit}
+    })
+  }
+  componentWillReceiveProps(props) {
+    this.unsubscribe()
+    this.store = createStore(reducer, {bemjson: props.bemjson})
+    this.unsubscribe = this.store.subscribe(() => {
+      this.props.onChange(this.store.getState().bemjson)
     })
   }
 

@@ -11,10 +11,12 @@ import CloseIcon from 'react-icons/lib/fa/close';
 import SaveIcon from 'react-icons/lib/fa/check';
 import AddIcon from 'react-icons/lib/fa/plus';
 
+import EditorBemjson from '../../../Editor/EditorBemjson';
 import Header from '../Header';
-import cssModules from '~/utils/CSSModules';
+import cssm from '~/utils/CSSModules';
+const style = require('./App.scss');
 
-@cssModules(require('./App.scss'))
+@cssm(style)
 export default class App extends Component {
   static propTypes = {
     projects: PropTypes.object,
@@ -23,19 +25,34 @@ export default class App extends Component {
     super(props);
     this.state = {
       active: 0,
-      project: this.props.projects[0],
+      projects: [],
+      project: {},
     };
-    this.setActive = this.setActive.bind(this)
   }
-  setActive() {
-    const active = 1
-    const project = this.props.projects[active] || {};
+  componentDidMount() {
+    this.getProjects();
+  }
+  getProjects = () => {
+    let { project } = this.state;
+    fetch('http://y.mgbeta.ru:666/projects', {
+      method: 'GET',
+    })
+    .then((res) => res.json())
+    .then((obj) => obj.data)
+    .then((projects) => {
+      project = projects[0];
+      this.setState({ projects, project });
+    });
+  }
+  setActive = (index) => {
+    const active = index;
+    const project = this.state.projects[active] || {};
     this.setState({ active, project });
   }
   renderProjectItems() {
-    return this.props.projects.map((prj, index) => (
+    return this.state.projects.map((prj, index) => (
       <NavItem
-        onClick={this.setActive}
+        onClick={this.setActive.bind(this, index)}
         active={index === this.state.active}
       >
         {prj.name}
@@ -43,19 +60,6 @@ export default class App extends Component {
     ))
   }
   render() {
-    const panelHeader = (
-      <h2>{this.state.project.name}
-        <div style={{ marginLeft: 'auto' }}>
-          <Button bsSize="small" bsStyle="danger" style={{ borderRadius: '3px 0 0 3px' }}>
-            <CloseIcon />
-          </Button>
-          <Button bsSize="small" bsStyle="success" style={{ borderRadius: '0 3px 3px 0' }}>
-            <SaveIcon />
-          </Button>
-        </div>
-      </h2>
-    );
-    const { project } = this.state;
     return (
       <div styleName="root">
         <Header />
@@ -69,7 +73,7 @@ export default class App extends Component {
             </Col>
             <Col md={10} mdOffset={2} sm={9} smOffest={3}>
               <div styleName="inner">
-                <EditorBemjson bemjson={json} onSave={() => {}} />
+                <EditorBemjson bemjson={this.state.project} onSave={() => {}} />
               </div>
             </Col>
           </Row>
