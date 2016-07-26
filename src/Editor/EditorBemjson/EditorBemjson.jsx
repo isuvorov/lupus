@@ -23,7 +23,7 @@ class EditorBemjsonSegmentConnected extends Component{
 
   @autobind
   handleClickSave() {
-    this.props.onSubmit(this.props.bemjson)
+    // this.props.onSubmit(this.props.bemjson)
     console.log(this.props.bemjson);
   }
 
@@ -45,6 +45,7 @@ export default class EditorBemjson extends Component {
     this.store = createStore(reducer, {bemjson: this.props.bemjson})
     this.store.subscribe(() => {
       this.props.onChange(this.store.getState().bemjson)
+      // this.props.onSave(this.store.getState().bemjson);
       // console.log('subscribe', this.store.getState().bemjson);
       // onSubmit={this.props.onSubmit}
     })

@@ -1,0 +1,15 @@
+.initial {
+  height: 70px;
+  border: none;
+  background-color: white;
+}
+.navbar-brand {
+    height: 70px;
+    padding: 24px 15px;
+}
+@media (min-width: 768px) {
+  .navbar-nav>li>a {
+      padding-top: 25px;
+      padding-bottom: 25px;
+  }
+}

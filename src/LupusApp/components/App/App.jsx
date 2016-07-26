@@ -1,20 +1,17 @@
-import { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import EditorBemjson from '../../../Editor/EditorBemjson';
 
 import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import Button from 'react-bootstrap/lib/Button';
-import Nav from 'react-bootstrap/lib/Nav';
+import Tab from 'react-bootstrap/lib/Tab';
+import Tabs from 'react-bootstrap/lib/Tabs';
 import NavItem from 'react-bootstrap/lib/NavItem';
 
-import CloseIcon from 'react-icons/lib/fa/close';
-import SaveIcon from 'react-icons/lib/fa/check';
-import AddIcon from 'react-icons/lib/fa/plus';
+import cssm from '~/utils/CSSModules';
+const style = require('./App.scss');
 
-import Header from '../Header';
-import cssModules from '~/utils/CSSModules';
-
-@cssModules(require('./App.scss'))
+@cssm(style)
 export default class App extends Component {
   static propTypes = {
     projects: PropTypes.object,
@@ -42,39 +39,40 @@ export default class App extends Component {
       </NavItem>
     ))
   }
+  saveTab(data) {
+    const { project } = this.state;
+    project.files = data;
+    this.setState({ project })
+  }
   render() {
-    const panelHeader = (
-      <h2>{this.state.project.name}
-        <div style={{ marginLeft: 'auto' }}>
-          <Button bsSize="small" bsStyle="danger" style={{ borderRadius: '3px 0 0 3px' }}>
-            <CloseIcon />
-          </Button>
-          <Button bsSize="small" bsStyle="success" style={{ borderRadius: '0 3px 3px 0' }}>
-            <SaveIcon />
-          </Button>
-        </div>
-      </h2>
-    );
     const { project } = this.state;
     return (
-      <div styleName="root">
-        <Header />
-        <Grid fluid styleName="content">
-          <Row>
-            <Col styleName="fullish" className="sidebar" md={2} sm={3}>
-              <Nav bsStyle="pills" styleName="inner" stacked>
-                {this.renderProjectItems()}
-                <Button block><AddIcon /> Добавить проект</Button>
-              </Nav>
-            </Col>
-            <Col md={10} mdOffset={2} sm={9} smOffest={3}>
+      <Row>
+        <Col styleName="fullish" md={12}>
+          <Tabs defaultActiveKey={1} animation={false} id="project-tabs">
+            <Tab eventKey={1} title="Информация">
               <div styleName="inner">
-                <EditorBemjson bemjson={json} onSave={() => {}} />
+                <EditorBemjson bemjson={project} onSave={() => {}} />
               </div>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+            </Tab>
+            <Tab eventKey={2} title="Общие данные">
+              <div styleName="inner">
+                <EditorBemjson bemjson={project.general} onSave={() => {}} />
+              </div>
+            </Tab>
+            <Tab eventKey={3} title="Репозитории">
+              <div styleName="inner">
+                <EditorBemjson bemjson={project.repos} onSave={() => {}} />
+              </div>
+            </Tab>
+            <Tab eventKey={4} title="Файлы">
+              <div styleName="inner">
+                <EditorBemjson bemjson={project.files} onChange={this.saveTab} />
+              </div>
+            </Tab>
+          </Tabs>
+        </Col>
+      </Row>
     );
   }
 }

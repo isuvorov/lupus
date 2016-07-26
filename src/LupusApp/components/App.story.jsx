@@ -1,4 +1,4 @@
-import App from './App'
+import AppContainer from './AppContainer';
 /* eslint-disable */
 const project = {
   "_id": "578752bbf1f2f80ae6e18765",
@@ -20,6 +20,11 @@ const project = {
     "foo": "bar"
   }
 }
+const user = {
+  username: "admini",
+  avatar: "https://cdn2.iconfinder.com/data/icons/danger-problems/512/anonymous-512.png"
+}
+
 /* eslint-enable */
 
 module.exports = ({ storiesOf, action }) => {
@@ -28,18 +33,13 @@ module.exports = ({ storiesOf, action }) => {
     // Object.assign({}, project, { name: 'biz-accord.ru' }),
     project,
   ]
-  return storiesOf('App', module)
-    .add('Default', () => {
-      return <App
+  // onChange={action('onChange')}
+  // onSubmit={action('onSubmit')}
+  return storiesOf('Lupus', module)
+    .add('Default', () => (
+      <AppContainer
+        user={user}
         projects={projects}
-        onChange={action('onChange')}
-        onSubmit={action('onSubmit')}
       />
-    })
-    .add('Api', () => {
-      const api = {}
-      return <AppContainer
-        api={api}
-      />
-    })
+    ))
 }
