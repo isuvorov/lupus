@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { Grid, Row, Col, Table, Modal, Button, Input } from 'react-bootstrap'
+import { Row, Col, Table, Button, Input } from 'react-bootstrap'
 import _ from 'lodash'
 import linkState from 'react-link-state'
 import { autobind, debounce } from 'core-decorators';
@@ -10,7 +10,7 @@ import IconPlus from 'react-icons/lib/fa/plus'
 import IconArrowUp from 'react-icons/lib/fa/arrow-up'
 import IconArrowDown from 'react-icons/lib/fa/arrow-down'
 
-import EditorBemjsonModal from './EditorBemjsonModal'
+import EditorBemjsonModal from '../EditorBemjsonModal'
 import InputDebounce from './InputDebounce'
 
 
@@ -22,7 +22,7 @@ class ObjectPropCreator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      key: '1',
+      key: '',
       value: '',
       type: 'string',
     }
@@ -60,7 +60,8 @@ class ObjectPropCreator extends Component {
 export default class EditorBemjsonSegment extends Component {
 
   static propTypes = {
-    bemjson: PropTypes.any.isRequired,
+    schema: PropTypes.object,
+    value: PropTypes.any.isRequired,
     path: PropTypes.array,
     dispatch: PropTypes.func,
   }
@@ -79,7 +80,7 @@ export default class EditorBemjsonSegment extends Component {
   // componentWillReceiveProps(nextProps) {
   //   if (this.getType() === 'simple') {
   //     this.setState({
-  //       val: nextProps.bemjson,
+  //       val: nextProps.value,
   //     });
   //   }
   //   return false
@@ -88,11 +89,11 @@ export default class EditorBemjsonSegment extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     // return false
     if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true
-    if (JSON.stringify(nextProps.bemjson) === JSON.stringify(this.props.bemjson)) return false
-    console.log(JSON.stringify(nextProps.bemjson) !== JSON.stringify(this.props.bemjson), nextProps.bemjson , this.props.bemjson);
-    // console.log(nextProps.bemjson !== this.props.bemjson, nextProps.bemjson , this.props.bemjson);
+    if (JSON.stringify(nextProps.value) === JSON.stringify(this.props.value)) return false
+    console.log(JSON.stringify(nextProps.value) !== JSON.stringify(this.props.value), nextProps.value , this.props.value);
+    // console.log(nextProps.value !== this.props.value, nextProps.value , this.props.value);
     return true
-    // return JSON.stringify(nextProps.bemjson) !== JSON.stringify(this.props.bemjson)
+    // return JSON.stringify(nextProps.value) !== JSON.stringify(this.props.value)
   }
 
   @debounce(300)
@@ -111,10 +112,10 @@ export default class EditorBemjsonSegment extends Component {
   }
 
   getType() {
-    const bemjson = this.props.bemjson
-    if (_.isArray(bemjson)) {
+    const value = this.props.value
+    if (_.isArray(value)) {
       return 'array'
-    } else if (_.isPlainObject(bemjson)) {
+    } else if (_.isPlainObject(value)) {
       return 'object'
     }
     return 'simple'
@@ -133,14 +134,14 @@ export default class EditorBemjsonSegment extends Component {
         type="text"
         className="form-control"
         ref="input"
-        defaultValue={this.props.bemjson}
+        defaultValue={this.props.value}
         onChange={handleChange}
       />
     </div>
   }
 
   renderObject() {
-    const childs = _.map(this.props.bemjson, (value, key) => {
+    const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
 
       const remove = () => {
@@ -151,12 +152,12 @@ export default class EditorBemjsonSegment extends Component {
       }
 
       // change in modal
-      const onChange = (bemjson) => {
-        console.log('onChange', bemjson);
+      const onChange = (value) => {
+        console.log('onChange', value);
         this.props.dispatch({
           type: 'editorSet',
           path,
-          value: bemjson,
+          value: value,
         });
       }
 
@@ -174,7 +175,7 @@ export default class EditorBemjsonSegment extends Component {
             </Button>
           </label>
           <br />
-          <EditorBemjsonSegment bemjson={value} path={path} dispatch={this.props.dispatch} />
+          <EditorBemjsonSegment value={value} path={path} dispatch={this.props.dispatch} />
         </div>
       );
     })
@@ -195,8 +196,8 @@ export default class EditorBemjsonSegment extends Component {
   }
 
   renderArray() {
-    const last = this.props.bemjson.length - 1;
-    const childs = _.map(this.props.bemjson, (value, key) => {
+    const last = this.props.value.length - 1;
+    const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
 
       const up = () => {
@@ -230,7 +231,7 @@ export default class EditorBemjsonSegment extends Component {
             {key}
           </td>
           <td>
-            <EditorBemjsonSegment bemjson={value} path={path} dispatch={this.props.dispatch} />
+            <EditorBemjsonSegment value={value} path={path} dispatch={this.props.dispatch} />
           </td>
           <td>
             <Button bsStyle="primary" bsSize="small" onClick={up} disabled={key === 0}>
@@ -250,7 +251,7 @@ export default class EditorBemjsonSegment extends Component {
     const push = () => {
       this.props.dispatch({
         type: 'editorSet',
-        path: this.getPath(this.props.bemjson.length),
+        path: this.getPath(this.props.value.length),
         value: '',
       });
     }

@@ -1,15 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import { Grid, Row, Col, Table, Modal, Button, Input } from 'react-bootstrap'
-
-import _ from 'lodash';
-import linkState from 'react-link-state'
+import { Modal, Button, Input } from 'react-bootstrap'
 import { autobind } from 'core-decorators';
-
-import IconCode from 'react-icons/lib/fa/code'
-import IconClose from 'react-icons/lib/fa/close'
-import IconPlus from 'react-icons/lib/fa/plus'
-import IconArrowUp from 'react-icons/lib/fa/arrow-up'
-import IconArrowDown from 'react-icons/lib/fa/arrow-down'
 
 export default class EditorBemjsonModal extends Component {
   static propTypes = {
@@ -36,17 +27,16 @@ export default class EditorBemjsonModal extends Component {
 
   @autobind
   saveAndClose() {
-    try{
+    try {
       const value = JSON.parse(this.state.str)
 
       this.setState({ showModal: false }, () => {
         this.props.onChange(value)
       });
-    }catch(e){
+    } catch (e) {
       console.log(e);
       alert('JSON ERROR')
     }
-
   }
 
   @autobind
@@ -63,7 +53,7 @@ export default class EditorBemjsonModal extends Component {
   handleChange(e) {
     console.log('e.target.value', e.target.value);
     this.setState({
-      str: e.target.value
+      str: e.target.value,
     })
   }
 
@@ -86,7 +76,7 @@ export default class EditorBemjsonModal extends Component {
       </Button>
       <Modal show={this.state.showModal} onHide={this.close}>
         <Modal.Header closeButton>
-          <Modal.Title>Редактирование {JSON.stringify(this.props.path)}</Modal.Title>
+          <Modal.Title>Редактирование {['#', ...this.props.path].join('/')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Input
@@ -94,6 +84,7 @@ export default class EditorBemjsonModal extends Component {
             label="Text Area"
             placeholder="textarea"
             value={this.state.str}
+            rows={8}
             onChange={this.handleChange}
           />
         </Modal.Body>

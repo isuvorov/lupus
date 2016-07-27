@@ -32,12 +32,9 @@ export function editorRemove(originState, action) {
 }
 
 export function editorRemoveElement(originState, action) {
-  console.log(action)
   var state = _.cloneDeep(originState);
   var command = 'state.bemjson' + path(action.path) + '.splice(' + action.index + ', 1);';
-  console.log(command)
   eval(command);
-
   return state;
 }
 
@@ -52,6 +49,7 @@ export function editorSwap(originState, action) {
 }
 
 export default function(state = {}, action) {
+  console.log('reducer');
   switch (action.type) {
 
     case 'editorSwap':
