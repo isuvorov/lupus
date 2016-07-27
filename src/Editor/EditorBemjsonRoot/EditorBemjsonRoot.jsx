@@ -1,18 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import { Grid, Row, Col, Table, Modal, Button, Input } from 'react-bootstrap'
-import _ from 'lodash'
 
 import EditorBemjsonSegment from '../EditorBemjsonSegment'
 
 import { autobind } from 'core-decorators';
-import { createStore } from 'redux'
-import { Provider, connect } from 'react-redux'
-
-import reducer from '../reducer';
+import { connect } from 'react-redux'
 
 @connect(
   state => ({
-    value: state.bemjson,
+    // state,
+    value: state.value,
     schema: state.schema,
   }),
   dispatch => ({

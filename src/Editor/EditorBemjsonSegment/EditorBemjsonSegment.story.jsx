@@ -14,8 +14,47 @@ module.exports = ({ storiesOf, action }) => {
         dispatch={action('dispatch')}
       />
     })
+    .add('Default', () => {
+      const value = {
+        int: 123,
+        float: 123.45,
+        string: 'Test string',
+        intArray: [0, 1, 2, 3, 4, 5],
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('int', () => {
+      const value = {int: 123}
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('string', () => {
+      const value = {string: 'string'}
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('string textarea', () => {
+      const value = 'textarea\n\ttextarea\n\t\ttextarea'
+      const schema = {
+        type: 'string',
+        format: 'textarea',
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        schema={schema}
+        dispatch={action('dispatch')}
+      />
+    })
     .add('schema', () => {
       const json = {
+        "textarea": "TEXT TEXT TEXT",
         "address": {
           "streetAddress": "21 2nd Street",
           "city": "New York"

@@ -8,7 +8,11 @@ export default (ctx) => {
 
   api.all('/', (req, res) => res.ok({title: 'api', version: 1}))
   api.get('/projects', () => Project.find())
-  api.post('/projects', (req) => new Project(req.body))
+  api.post('/projects', (req) => {
+    const project = new Project(req.body)
+    return project.save()
+  })
+
   api.get('/projects/byName/:name', (req) => Project.findOne({name: req.params.name}))
   api.get('/projects/:id', (req) => Project.findOne({_id: req.params.id}))
   api.get('/projects/byName/:name/runTask/:task', (req) => {

@@ -64,22 +64,22 @@ export default class App extends Component {
   }
   newProject = () => {
     const { newProject, projects } = this.state;
-    if (newProject.length > 5) {
-      fetch('http://localhost:3000/api/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: newProject }),
-      })
-      .then((res) => res.json())
-      .then((obj) => obj.data)
-      .then((project) => {
-        projects.push(project);
-        this.setState({ projects, project });
-        this.closeModal();
-      });
-    }
+    // if (newProject.length > 5) {
+    fetch('http://localhost:3000/api/projects', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: newProject }),
+    })
+    .then((res) => res.json())
+    .then((obj) => obj.data)
+    .then((project) => {
+      projects.push(project);
+      this.setState({ projects, project });
+      this.closeModal();
+    });
+    // }
   }
   closeModal = () => {
     this.setState({ showModal: false });
@@ -103,7 +103,7 @@ export default class App extends Component {
   render() {
     return (
       <div styleName="root">
-        <Header />
+        {/*<Header />*/}
         <Grid fluid styleName="content">
           <Row>
             <Col styleName="fullish" className="sidebar" md={2} sm={3}>
@@ -112,9 +112,10 @@ export default class App extends Component {
                 <Button onClick={this.openModal}><AddIcon /> Добавить проект</Button>
               </Nav>
             </Col>
-            <Col md={10} mdOffset={2} sm={9} smOffest={3}>
+            {/*<Col md={10} mdOffset={2} sm={9} smOffest={3}>*/}
+            <Col md={10} sm={9}>
               <div styleName="inner">
-                <EditorBemjson bemjson={this.state.project} onSave={() => {}} />
+                <EditorBemjson value={this.state.project} onSave={() => {}} />
               </div>
             </Col>
           </Row>

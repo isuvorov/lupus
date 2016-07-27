@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormControl } from 'react-bootstrap'
 import _ from 'lodash'
 
 export default class InputDebounce extends Component {
@@ -24,6 +25,14 @@ export default class InputDebounce extends Component {
   }
 
   render() {
+    if (this.props.type === 'textarea') {
+      return <FormControl
+        componentClass="textarea"
+        {...this.props}
+        value={this.state.value}
+        onChange={this.hangleChange.bind(this)}
+         />
+    }
     return <input
       {...this.props}
       value={this.state.value}
