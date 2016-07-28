@@ -12,6 +12,7 @@ export default class SegmentObject extends SegmentPrototype {
   render() {
     const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
+      const schema = this.getSchema(key);
 
       const remove = () => {
         this.props.dispatch({
@@ -44,7 +45,12 @@ export default class SegmentObject extends SegmentPrototype {
             </Button>
           </label>
           <br />
-          <EditorBemjsonSegment value={value} path={path} dispatch={this.props.dispatch} />
+          <EditorBemjsonSegment
+            value={value}
+            path={path}
+            dispatch={this.props.dispatch}
+            schema={schema}
+          />
         </div>
       );
     })

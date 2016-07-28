@@ -20,7 +20,7 @@ export default class EditorBemjsonRoot extends Component{
 
   @autobind
   handleClickSave() {
-    this.props.onSubmit(this.props.value)
+    this.props.onSubmit && this.props.onSubmit(this.props.value)
   }
 
   render() {

@@ -16,6 +16,9 @@ import CloseIcon from 'react-icons/lib/fa/close';
 import SaveIcon from 'react-icons/lib/fa/check';
 import AddIcon from 'react-icons/lib/fa/plus';
 
+import { autobind } from 'core-decorators'
+
+
 import EditorBemjson from '../../../Editor/EditorBemjson';
 import Header from '../Header';
 import cssm from '~/utils/CSSModules';
@@ -90,6 +93,26 @@ export default class App extends Component {
   handleChange = (e) => {
     this.setState({ newProject: e.target.value });
   }
+
+  @autobind
+  handleSubmit(json) {
+    fetch(`http://localhost:3000/api/projects/${this.state.project._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(json),
+    })
+    .then((res) => res.json())
+    .then((obj) => obj.data)
+    .then((project) => {
+      console.log(project);
+      alert('saved')
+    });
+    // }
+    // this.setState({ newProject: e.target.value });
+  }
+
   renderProjectItems = () => {
     return this.state.projects.map((prj, index) => (
       <NavItem
@@ -115,7 +138,7 @@ export default class App extends Component {
             {/*<Col md={10} mdOffset={2} sm={9} smOffest={3}>*/}
             <Col md={10} sm={9}>
               <div styleName="inner">
-                <EditorBemjson value={this.state.project} onSave={() => {}} />
+                <EditorBemjson value={this.state.project} onSubmit={this.handleSubmit} />
               </div>
             </Col>
           </Row>

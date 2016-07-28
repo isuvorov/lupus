@@ -15,7 +15,7 @@ export default class SegmentTextarea extends SegmentPrototype {
         type="textarea"
         className="form-control"
         ref="input"
-        defaultValue={this.props.value}
+        value={this.props.value}
         onChange={handleChange}
       />
     </div>

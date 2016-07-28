@@ -15,6 +15,7 @@ export default class SegmentArray extends SegmentPrototype {
     const last = this.props.value.length - 1;
     const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
+      const schema = this.getSchema(key);
 
       const up = () => {
         this.props.dispatch({
@@ -40,6 +41,7 @@ export default class SegmentArray extends SegmentPrototype {
         });
       }
 
+
       // ЛЮБОЕ СЛОВО, ТЕЛО СЕГМЕНТА
       return <tbody key={key}>
         <tr>
@@ -47,7 +49,12 @@ export default class SegmentArray extends SegmentPrototype {
             {key}
           </td>
           <td>
-            <EditorBemjsonSegment value={value} path={path} dispatch={this.props.dispatch} />
+            <EditorBemjsonSegment
+              value={value}
+              path={path}
+              dispatch={this.props.dispatch}
+              schema={schema}
+            />
           </td>
           <td>
             <Button bsStyle="primary" bsSize="small" onClick={up} disabled={key === 0}>

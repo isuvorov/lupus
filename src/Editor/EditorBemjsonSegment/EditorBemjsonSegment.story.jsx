@@ -52,6 +52,43 @@ module.exports = ({ storiesOf, action }) => {
         dispatch={action('dispatch')}
       />
     })
+    .add('object textarea', () => {
+      const value = {
+        textarea: 'textarea\n\ttextarea\n\t\ttextarea'
+      }
+      const schema = {
+        type: 'object',
+        properties: {
+          textarea: {
+            type: 'string',
+            format: 'textarea',
+          }
+        }
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        schema={schema}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('array of textarea', () => {
+      const value = [
+        'textarea\n\ttextarea\n\t\ttextarea',
+        'textarea2\n\ttextarea2\n\t\ttextarea2',
+      ]
+      const schema = {
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'textarea',
+        }
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        schema={schema}
+        dispatch={action('dispatch')}
+      />
+    })
     .add('schema', () => {
       const json = {
         "textarea": "TEXT TEXT TEXT",

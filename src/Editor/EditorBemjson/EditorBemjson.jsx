@@ -13,11 +13,12 @@ export default class EditorBemjson extends Component {
     super(props)
     this.store = createStore(reducer, {value: props.value, schema: props.schema})
     this.unsubscribe = this.store.subscribe(() => {
-      this.props.onChange && this.props.onChange(this.store.getState().bemjson)
+      this.props.onChange && this.props.onChange(this.store.getState().value)
     })
   }
 
   componentWillReceiveProps(props) {
+    if (JSON.stringify(this.props) === JSON.stringify(props)) return null
     this.store.dispatch({
       type: 'init',
       value: props.value,

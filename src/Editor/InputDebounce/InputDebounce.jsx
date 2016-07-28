@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FormControl } from 'react-bootstrap'
 import _ from 'lodash'
+import { autobind } from 'core-decorators';
 
 export default class InputDebounce extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class InputDebounce extends Component {
     });
   }
 
+  @autobind
   hangleChange(e) {
     this.setState({
       value: e.target.value,
@@ -30,13 +32,13 @@ export default class InputDebounce extends Component {
         componentClass="textarea"
         {...this.props}
         value={this.state.value}
-        onChange={this.hangleChange.bind(this)}
-         />
+        onChange={this.hangleChange}
+      />
     }
     return <input
       {...this.props}
       value={this.state.value}
-      onChange={this.hangleChange.bind(this)}
+      onChange={this.hangleChange}
     />
     // return <span>
     //   {this.props.defaultValue}

@@ -42,9 +42,19 @@ export default class SegmentPrototype extends Component {
     return 'simple'
   }
 
-  getSchema() {
-    if (this.props.schema) return this.props.schema
-    return null
+  getSchema(key = null) {
+    if (!this.props.schema) return null
+    const schema = this.props.schema
+    if (key !== null) {
+      if (schema.properties) {
+        return schema.properties[key]
+      }
+      if (schema.items) {
+        return schema.items
+      }
+      return null
+    }
+    return schema
   }
 
   getType() {

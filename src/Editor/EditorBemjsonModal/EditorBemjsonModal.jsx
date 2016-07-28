@@ -1,42 +1,41 @@
 import React, { Component, PropTypes } from 'react'
-import { Modal, Button, Input } from 'react-bootstrap'
+import { Modal, Button, Input, FormGroup, Radio } from 'react-bootstrap'
 import { autobind } from 'core-decorators';
 
 export default class EditorBemjsonModal extends Component {
   static propTypes = {
-    bemjson: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
     path: PropTypes.array,
     onChange: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
+  getInitialState(props) {
+    return {
       showModal: false,
-      value: props.value,
+      // value: props.value,
       str: JSON.stringify(props.value),
+      view: 'json',
+      name: this.props.path[this.props.path.length - 1]
     }
   }
 
+  constructor(props) {
+    super(props)
+    this.state = this.getInitialState(props)
+  }
+
   componentWillReceiveProps(props) {
-    this.setState({
-      value: props.value,
-      str: JSON.stringify(props.value),
-    });
+    this.setState(this.getInitialState(props));
   }
 
   @autobind
   saveAndClose() {
-    try {
-      const value = JSON.parse(this.state.str)
-
-      this.setState({ showModal: false }, () => {
-        this.props.onChange(value)
-      });
-    } catch (e) {
-      console.log(e);
-      alert('JSON ERROR')
-    }
+    const value = this.getValue()
+    if (value === undefined) return false
+    //JSON.parse(this.state.str)
+    this.setState({ showModal: false }, () => {
+      this.props.onChange(value)
+    });
   }
 
   @autobind
@@ -57,12 +56,35 @@ export default class EditorBemjsonModal extends Component {
     })
   }
 
-  stringify(value) {
-    return JSON.stringify(value)
+  getValue() {
+    try {
+      if (this.state.view === 'json') {
+        return JSON.parse(this.state.str)
+      } else if (this.state.view === 'js') {
+        return eval(this.state.str)
+      }
+      return this.state.str
+    } catch (e) {
+      console.log(e);
+      alert('INPUT ERROR')
+      return undefined
+    }
   }
+  // stringify(value) {
+  //   return JSON.stringify(value)
+  // }
+  //
+  // parse(value) {
+  //   return JSON.parse(value)
+  // }
 
-  parse(value) {
-    return JSON.parse(value)
+  handleChange(name) {
+    return e => {
+      console.log('handleChange', name, e.target.value, this);
+      this.setState({
+        [name]: e.target.value
+      })
+    }
   }
 
   render() {
@@ -80,13 +102,31 @@ export default class EditorBemjsonModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <Input
+            type="input"
+            label="Name"
+            onChange={this.handleChange('name')}
+            value={this.state.name}
+          />
+          <Input
             type="textarea"
-            label="Text Area"
-            placeholder="textarea"
+            label="Value"
+            onChange={this.handleChange('str')}
             value={this.state.str}
             rows={8}
-            onChange={this.handleChange}
           />
+          <FormGroup onChange={this.handleChange('view')}>
+            <Radio name='view' value='string' checked={this.state.view === 'string'}  inline>
+              String
+            </Radio>
+            {' '}
+            <Radio name='view' value='json' checked={this.state.view === 'json'} inline>
+              JSON
+            </Radio>
+            {' '}
+            <Radio name='view' value='js' checked={this.state.view === 'js'}  inline>
+              JavaScript
+            </Radio>
+          </FormGroup>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.close}>Отменить</Button>

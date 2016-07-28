@@ -15,6 +15,9 @@ export default (ctx) => {
 
   api.get('/projects/byName/:name', (req) => Project.findOne({name: req.params.name}))
   api.get('/projects/:id', (req) => Project.findOne({_id: req.params.id}))
+  api.put('/projects/:id', async (req) => {
+    return Project.update({_id: req.params.id}, req.body)
+  })
   api.get('/projects/byName/:name/runTask/:task', (req) => {
     return Project.findOne({name: req.params.name}).then(project => {
       if (!project) throw e404
