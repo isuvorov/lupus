@@ -42,6 +42,40 @@ export default class SegmentPrototype extends Component {
     return 'simple'
   }
 
+  getSample(schema) {
+
+    let value
+    if (schema.type === 'object') {
+      value = {}
+      _.forEach(schema.properties || {}, (val, key) => {
+        value[key] = this.getSample(val)
+      })
+      return value
+    }
+    if (schema.type === 'array') {
+      return [this.getSample(schema.items)]
+    }
+    if (schema.type === 'number') {
+      return 0
+    }
+    if (schema.type === 'string') {
+      return ''
+    }
+    return null
+
+    //value = []
+    //
+    // return schema
+    // this.getSuperType()
+    // const value = this.props.value
+    // if (_.isArray(value)) {
+    //   return 'array'
+    // } else if (_.isPlainObject(value)) {
+    //   return 'object'
+    // }
+    // return 'simple'
+  }
+
   getSchema(key = null) {
     if (!this.props.schema) return null
     const schema = this.props.schema

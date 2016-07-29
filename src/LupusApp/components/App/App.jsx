@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import Modal from 'react-bootstrap/lib/Modal';
+import Table from 'react-bootstrap/lib/Table';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
@@ -18,6 +19,56 @@ import AddIcon from 'react-icons/lib/fa/plus';
 
 import { autobind } from 'core-decorators'
 
+
+
+const schema = {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "base": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            format: "textarea"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string",
+            format: "textarea"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
 
 import EditorBemjson from '../../../Editor/EditorBemjson';
 import Header from '../Header';
@@ -104,11 +155,19 @@ export default class App extends Component {
       body: JSON.stringify(json),
     })
     .then((res) => res.json())
-    .then((obj) => obj.data)
+    .then((obj) => {
+      if (obj.err) throw obj.err
+      return obj.data
+    })
     .then((project) => {
       console.log(project);
       alert('saved')
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+      alert('error')
+    })
+
     // }
     // this.setState({ newProject: e.target.value });
   }
@@ -124,6 +183,13 @@ export default class App extends Component {
     ))
   }
   render() {
+    const project = this.state.project
+    const tasks = this.state.project.tasks || []
+    const getWebhook = (url) => {
+      return `http://panel.s3.mgbeta.ru/api/projects/byName/${project.name}/${url}`
+      return `http://panel.s3.mgbeta.ru/projects/byName/${project.name}/syncFs/runTask`
+      return 'http://lupus.s3.mgbeta.ru/'
+    }
     return (
       <div styleName="root">
         {/*<Header />*/}
@@ -137,8 +203,57 @@ export default class App extends Component {
             </Col>
             {/*<Col md={10} mdOffset={2} sm={9} smOffest={3}>*/}
             <Col md={10} sm={9}>
+
+              <div className="well">
+                <Table striped bordered condensed hover>
+                  <thead>
+                    <tr>
+                      <th>Task</th>
+                      <th>Webhook URL</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>
+                        syncFs
+                      </th>
+                      <td>
+                        <pre>{getWebhook(`runTask/syncFs`)}</pre>
+                      </td>
+                      <td>
+                        <Button bsStyle='primary' href={getWebhook(`runTask/syncFs`)} target='_blank'>
+                          Выполнить
+                        </Button>
+                      </td>
+                    </tr>
+                    <For each="item" index="i" of={tasks}>
+                      {/*<span key={ idx }>{ item }</span>
+                      <span key={ idx + '_2' }>Static Text</span>*/}
+                      <tr key={i}>
+                        <th>
+                          {item.name}
+                          {/*{JSON.stringify(item)}*/}
+                        </th>
+                        <td>
+                          <pre>{getWebhook(`runTask/${item.name}`)}</pre>
+                        </td>
+                        <td>
+                          <Button bsStyle='primary' href={getWebhook(`runTask/${item.name}`)} target='_blank'>
+                            Выполнить
+                          </Button>
+                        </td>
+                      </tr>
+                    </For>
+                  </tbody>
+                </Table>
+              </div>
               <div styleName="inner">
-                <EditorBemjson value={this.state.project} onSubmit={this.handleSubmit} />
+                <EditorBemjson
+                  value={this.state.project}
+                  schema={schema}
+                  onSubmit={this.handleSubmit}
+                />
               </div>
             </Col>
           </Row>

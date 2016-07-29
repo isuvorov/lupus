@@ -71,21 +71,28 @@ export default class SegmentArray extends SegmentPrototype {
       </tbody>
     });
 
+    const schema = this.getSchema(0)
     const push = () => {
+      const value = {}
       this.props.dispatch({
         type: 'editorSet',
         path: this.getPath(this.props.value.length),
-        value: '',
+        value: this.getSample(schema),
+        // value: this.getSample(this.props.value.length),
       });
     }
 
     return <div>
-      <Table striped bordered condensed hover>
+      <Table striped bordered rounded condensed hover>
         {childs}
+        <tr>
+          <td colSpan={3} style={{textAlign:'center', padding: 5}}>
+            <Button bsStyle="success" bsSize="small" onClick={push} >
+              <IconPlus />
+            </Button>
+          </td>
+        </tr>
       </Table>
-      <Button bsStyle="success" bsSize="small" onClick={push} >
-        <IconPlus />
-      </Button>
     </div>
   }
 }
