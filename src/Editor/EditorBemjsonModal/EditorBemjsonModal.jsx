@@ -101,12 +101,14 @@ export default class EditorBemjsonModal extends Component {
           <Modal.Title>Редактирование {['#', ...this.props.path].join('/')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Input
-            type="input"
-            label="Name"
-            onChange={this.handleChange('name')}
-            value={this.state.name}
-          />
+          <If condition={this.props.changeName}>
+            <Input
+              type="input"
+              label="Name"
+              onChange={this.handleChange('name')}
+              value={this.state.name}
+            />
+          </If>
           <Input
             type="textarea"
             label="Value"

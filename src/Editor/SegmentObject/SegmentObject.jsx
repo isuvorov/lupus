@@ -10,6 +10,25 @@ import ObjectPropCreator from './ObjectPropCreator'
 
 export default class SegmentObject extends SegmentPrototype {
   render() {
+
+    const path = this.getPath();
+    const value = this.props.value;
+    const onChange = (value) => {
+      this.props.dispatch({
+        type: 'editorSet',
+        path,
+        value,
+      });
+    }
+
+    // return (
+    //   <div key={key}>
+    //     <label className=" control-label">
+    //       {key}
+    //       &nbsp;
+
+
+
     const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
       const schema = this.getSchema(key);
@@ -36,7 +55,7 @@ export default class SegmentObject extends SegmentPrototype {
           <label className=" control-label">
             {key}
             &nbsp;
-            <EditorBemjsonModal onChange={onChange} value={value} path={path}>
+            <EditorBemjsonModal changeName={true} onChange={onChange} value={value} path={path}>
               <IconCode />
             </EditorBemjsonModal>
             &nbsp;
@@ -64,6 +83,20 @@ export default class SegmentObject extends SegmentPrototype {
     }
 
     return <div className="well">
+      <h3>
+        Object &nbsp;
+        <Button bsSize='small' bsStyle='primary'>
+          v
+        </Button>
+        &nbsp;
+        <Button bsSize='small' bsStyle='primary'>
+          +
+        </Button>
+        &nbsp;
+        <EditorBemjsonModal onChange={onChange} value={value} path={path}>
+          <IconCode />
+        </EditorBemjsonModal>
+      </h3>
       {childs}
       <hr />
       <ObjectPropCreator onSubmit={push} />

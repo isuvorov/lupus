@@ -219,10 +219,10 @@ export default class App extends Component {
                         syncFs
                       </th>
                       <td>
-                        <pre>{getWebhook(`runTask/syncFs`)}</pre>
+                        <pre>{getWebhook(`syncFs`)}</pre>
                       </td>
                       <td>
-                        <Button bsStyle='primary' href={getWebhook(`runTask/syncFs`)} target='_blank'>
+                        <Button bsStyle='primary' href={getWebhook(`syncFs`)} target='_blank'>
                           Выполнить
                         </Button>
                       </td>

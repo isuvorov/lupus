@@ -40,18 +40,18 @@ export function getSchema(ctx) {
   //   } catch(e){}
   // }
 
-  schema.methods.getDir = (path) => {
+  schema.methods.getDir = function (path) {
     if (path) {
       return ctx.config.projectsDir + '/' + this.name + '/' + path
     }
     return ctx.config.projectsDir + '/' + this.name
   }
 
-  schema.methods.getFilenames = () => {
+  schema.methods.getFilenames = function () {
     return fs.readdirSync(this.getDir())
   }
 
-  schema.methods.getFiles = (path) => {
+  schema.methods.getFiles = function (path) {
     const files = {}
     const filenames = this.getFilenames()
     filenames.forEach(filename => {
@@ -172,7 +172,7 @@ export function getSchema(ctx) {
   //   })
   // }
 
-  schema.methods.syncFs = async () => {
+  schema.methods.syncFs = async function () {
     const writeFile = Promise.promisify(fs.writeFile)
     const mkdir2 = Promise.promisify(fs.mkdir)
     const mkdir = (dir) => mkdir2(dir).catch(e => {
@@ -202,8 +202,9 @@ export function getSchema(ctx) {
     }
   }
 
-  schema.methods.runTask = (taskName) => {
+  schema.methods.runTask = function (taskName) {
     const task = _.find(this.tasks, {name: taskName})
+    console.log('taskName', taskName, task);
     if (task.type === 'sh') {
       const filename = this.getDir(`tasks/${task.name}.${task.type}`)
 
