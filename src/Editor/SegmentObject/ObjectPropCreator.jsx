@@ -1,11 +1,14 @@
 import { Component, PropTypes } from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { autobind } from 'core-decorators';
 
 import linkState from 'react-link-state'
 import IconPlus from 'react-icons/lib/fa/plus'
 
+import cssm from '~/utils/CSSModules'
+const style = require('./style.scss')
 
+@cssm(style)
 export default class ObjectPropCreator extends Component {
   static propTypes = {
     onSubmit: PropTypes.func,
@@ -30,21 +33,13 @@ export default class ObjectPropCreator extends Component {
   }
 
   render() {
-    return <Row>
-     <Col xs={3}>
-      <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control" />
-     </Col>
-     <Col xs={6}>
-      <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control" />
-     </Col>
-     <Col xs={2}>
-      <input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control" />
-     </Col>
-     <Col xs={1}>
-      <Button onClick={this.handleClick} bsStyle="primary" bsSize="small">
-        <IconPlus />
-      </Button>
-     </Col>
-   </Row>
+    return <div>
+        <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control creator-key" />
+        <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control creator-value" />
+				<input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control creator-type" />
+				<Button onClick={this.handleClick} bsStyle="primary" bsSize="small" className="creator-add">
+	        <IconPlus /> Добавить объект
+	      </Button>
+      </div>
   }
 }

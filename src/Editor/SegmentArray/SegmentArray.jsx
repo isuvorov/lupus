@@ -1,4 +1,4 @@
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, ButtonGroup, PanelGroup, Panel } from 'react-bootstrap'
 import _ from 'lodash'
 
 import IconClose from 'react-icons/lib/fa/close'
@@ -9,7 +9,10 @@ import IconArrowDown from 'react-icons/lib/fa/arrow-down'
 import EditorBemjsonSegment from '../EditorBemjsonSegment'
 import SegmentPrototype from '../SegmentPrototype'
 
+import cssm from '~/utils/CSSModules'
+const style = require('../SegmentObject/style.scss')
 
+@cssm(style)
 export default class SegmentArray extends SegmentPrototype {
   render() {
     const last = this.props.value.length - 1;
@@ -41,34 +44,33 @@ export default class SegmentArray extends SegmentPrototype {
         });
       }
 
-
+			const header = (
+				<div>
+					{`Object ${key}`}
+					<ButtonGroup styleName="btn-group" bsSize='small'>
+						<Button bsStyle="default" onClick={up} disabled={key === 0}>
+							<IconArrowUp />
+						</Button>
+						<Button bsStyle="default" onClick={down} disabled={key === last}>
+							<IconArrowDown />
+						</Button>
+						<Button bsStyle="danger" onClick={remove}>
+							<IconClose />
+						</Button>
+					</ButtonGroup>
+				</div>
+			)
       // ЛЮБОЕ СЛОВО, ТЕЛО СЕГМЕНТА
-      return <tbody key={key}>
-        <tr>
-          <td>
-            {key}
-          </td>
-          <td>
-            <EditorBemjsonSegment
-              value={value}
-              path={path}
-              dispatch={this.props.dispatch}
-              schema={schema}
-            />
-          </td>
-          <td>
-            <Button bsStyle="primary" bsSize="small" onClick={up} disabled={key === 0}>
-              <IconArrowUp />
-            </Button>
-            <Button bsStyle="primary" bsSize="small" onClick={down} disabled={key === last}>
-              <IconArrowDown />
-            </Button>
-            <Button bsStyle="danger" bsSize="small" onClick={remove}>
-              <IconClose />
-            </Button>
-          </td>
-        </tr>
-      </tbody>
+      return <PanelGroup styleName="panel-group" defaultActiveKey={0} accordion>
+	    <Panel header={header} eventKey={key}>
+				<EditorBemjsonSegment
+					value={value}
+					path={path}
+					dispatch={this.props.dispatch}
+					schema={schema}
+				/>
+			</Panel>
+	  </PanelGroup>
     });
 
     const schema = this.getSchema(0)
@@ -83,16 +85,10 @@ export default class SegmentArray extends SegmentPrototype {
     }
 
     return <div>
-      <Table striped bordered rounded condensed hover>
         {childs}
-        <tr>
-          <td colSpan={3} style={{textAlign:'center', padding: 5}}>
-            <Button bsStyle="success" bsSize="small" onClick={push} >
-              <IconPlus />
-            </Button>
-          </td>
-        </tr>
-      </Table>
+				<Button bsStyle="success" onClick={push} block>
+					<IconPlus /> Добавить элемент
+				</Button>
     </div>
   }
 }

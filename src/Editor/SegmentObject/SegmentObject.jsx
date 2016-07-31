@@ -1,13 +1,19 @@
 import _ from 'lodash'
-import { Button } from 'react-bootstrap'
+import { Button, ButtonGroup, Panel } from 'react-bootstrap'
 import IconCode from 'react-icons/lib/fa/code'
 import IconClose from 'react-icons/lib/fa/close'
+import IconDown from 'react-icons/lib/fa/arrow-down'
+import IconPlus from 'react-icons/lib/fa/plus'
 
 import EditorBemjsonSegment from '../EditorBemjsonSegment'
 import EditorBemjsonModal from '../EditorBemjsonModal'
 import SegmentPrototype from '../SegmentPrototype'
 import ObjectPropCreator from './ObjectPropCreator'
 
+import cssm from '~/utils/CSSModules'
+const style = require('./style.scss')
+
+@cssm(style)
 export default class SegmentObject extends SegmentPrototype {
   render() {
 
@@ -49,28 +55,31 @@ export default class SegmentObject extends SegmentPrototype {
           value,
         });
       }
-
+			const header = (
+				<div styleName="panel-heading">
+					{key}
+					<ButtonGroup bsSize='small'>
+						<EditorBemjsonModal bsStyle="default" changeName={true} onChange={onChange} value={value} path={path}>
+							<IconCode />
+						</EditorBemjsonModal>
+						<Button onClick={remove} bsStyle="danger" bsSize="small">
+							<IconClose />
+						</Button>
+					</ButtonGroup>
+    		</div>
+			)
+			const ifArray = schema.type === 'array'
+			const panelStyle = ifArray ? "info" : "default"
       return (
-        <div key={key}>
-          <label className=" control-label">
-            {key}
-            &nbsp;
-            <EditorBemjsonModal changeName={true} onChange={onChange} value={value} path={path}>
-              <IconCode />
-            </EditorBemjsonModal>
-            &nbsp;
-            <Button onClick={remove} bsStyle="danger" bsSize="small">
-              <IconClose />
-            </Button>
-          </label>
-          <br />
+        <Panel key={key} bsStyle={panelStyle} header={header}>
           <EditorBemjsonSegment
+						styleName="panel-body"
             value={value}
             path={path}
             dispatch={this.props.dispatch}
             schema={schema}
           />
-        </div>
+        </Panel>
       );
     })
 
@@ -82,24 +91,26 @@ export default class SegmentObject extends SegmentPrototype {
       });
     }
 
-    return <div className="well">
+    return <div styleName="obj-content">
       <h3>
-        Object &nbsp;
-        <Button bsSize='small' bsStyle='primary'>
-          v
-        </Button>
-        &nbsp;
-        <Button bsSize='small' bsStyle='primary'>
-          +
-        </Button>
-        &nbsp;
-        <EditorBemjsonModal onChange={onChange} value={value} path={path}>
-          <IconCode />
-        </EditorBemjsonModal>
+        Object
+				<ButtonGroup bsSize='small'>
+					<Button bsStyle='default'>
+						<IconDown />
+					</Button>
+					<Button bsSize='small' bsStyle='default'>
+						<IconPlus />
+					</Button>
+					<EditorBemjsonModal bsStyle='default' onChange={onChange} value={value} path={path}>
+	          <IconCode />
+	        </EditorBemjsonModal>
+			  </ButtonGroup>
       </h3>
       {childs}
-      <hr />
-      <ObjectPropCreator onSubmit={push} />
+			<hr/>
+			<div className="obj-creator">
+				<ObjectPropCreator onSubmit={push} />
+			</div>
     </div>
   }
 }

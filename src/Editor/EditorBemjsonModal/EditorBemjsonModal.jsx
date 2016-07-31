@@ -88,53 +88,51 @@ export default class EditorBemjsonModal extends Component {
   }
 
   render() {
-    return <span>
-      <Button
-        bsStyle="primary"
+    return <Button
+        bsStyle={this.props.bsStyle || "primary"}
         bsSize="small"
         onClick={this.open}
       >
         {this.props.children}
+				<Modal show={this.state.showModal} onHide={this.close}>
+	        <Modal.Header closeButton>
+	          <Modal.Title>Редактирование {['#', ...this.props.path].join('/')}</Modal.Title>
+	        </Modal.Header>
+	        <Modal.Body>
+	          <If condition={this.props.changeName}>
+	            <Input
+	              type="input"
+	              label="Name"
+	              onChange={this.handleChange('name')}
+	              value={this.state.name}
+	            />
+	          </If>
+	          <Input
+	            type="textarea"
+	            label="Value"
+	            onChange={this.handleChange('str')}
+	            value={this.state.str}
+	            rows={8}
+	          />
+	          <FormGroup onChange={this.handleChange('view')}>
+	            <Radio name='view' value='string' checked={this.state.view === 'string'}  inline>
+	              String
+	            </Radio>
+	            {' '}
+	            <Radio name='view' value='json' checked={this.state.view === 'json'} inline>
+	              JSON
+	            </Radio>
+	            {' '}
+	            <Radio name='view' value='js' checked={this.state.view === 'js'}  inline>
+	              JavaScript
+	            </Radio>
+	          </FormGroup>
+	        </Modal.Body>
+	        <Modal.Footer>
+	          <Button onClick={this.close}>Отменить</Button>
+	          <Button onClick={this.saveAndClose} bsStyle="primary">Сохранить</Button>
+	        </Modal.Footer>
+	      </Modal>
       </Button>
-      <Modal show={this.state.showModal} onHide={this.close}>
-        <Modal.Header closeButton>
-          <Modal.Title>Редактирование {['#', ...this.props.path].join('/')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <If condition={this.props.changeName}>
-            <Input
-              type="input"
-              label="Name"
-              onChange={this.handleChange('name')}
-              value={this.state.name}
-            />
-          </If>
-          <Input
-            type="textarea"
-            label="Value"
-            onChange={this.handleChange('str')}
-            value={this.state.str}
-            rows={8}
-          />
-          <FormGroup onChange={this.handleChange('view')}>
-            <Radio name='view' value='string' checked={this.state.view === 'string'}  inline>
-              String
-            </Radio>
-            {' '}
-            <Radio name='view' value='json' checked={this.state.view === 'json'} inline>
-              JSON
-            </Radio>
-            {' '}
-            <Radio name='view' value='js' checked={this.state.view === 'js'}  inline>
-              JavaScript
-            </Radio>
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.close}>Отменить</Button>
-          <Button onClick={this.saveAndClose} bsStyle="primary">Сохранить</Button>
-        </Modal.Footer>
-      </Modal>
-    </span>
   }
 }

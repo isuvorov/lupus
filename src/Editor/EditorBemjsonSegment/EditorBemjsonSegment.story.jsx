@@ -97,7 +97,23 @@ module.exports = ({ storiesOf, action }) => {
           "city": "New York"
         },
         "phoneNumber": [
-          {
+					{
+            "location": "home",
+            "code": 44
+          },
+					{
+            "location": "home",
+            "code": 44
+          },
+					{
+            "location": "home",
+            "code": 44
+          },
+					{
+            "location": "home",
+            "code": 44
+          },
+					{
             "location": "home",
             "code": 44
           }
