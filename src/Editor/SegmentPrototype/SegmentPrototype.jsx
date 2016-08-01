@@ -32,8 +32,8 @@ export default class SegmentPrototype extends Component {
     return path
   }
 
-  getSuperType() {
-    const value = this.props.value
+  getSuperType(value = this.props.value) {
+    // const value = this.props.value
     if (_.isArray(value)) {
       return 'array'
     } else if (_.isPlainObject(value)) {

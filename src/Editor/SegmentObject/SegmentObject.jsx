@@ -68,8 +68,8 @@ export default class SegmentObject extends SegmentPrototype {
 					</ButtonGroup>
     		</div>
 			)
-			const ifArray = schema.type === 'array'
-			const panelStyle = ifArray ? "info" : "default"
+      const ifArray = this.getSuperType(value) === 'array'
+      const panelStyle = ifArray ? "info" : "default"
       return (
         <Panel key={key} bsStyle={panelStyle} header={header}>
           <EditorBemjsonSegment
