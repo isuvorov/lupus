@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Button, ButtonGroup, Panel } from 'react-bootstrap'
+import { Button, ButtonGroup, DropdownButton, MenuItem } from 'react-bootstrap'
 import IconCode from 'react-icons/lib/fa/code'
 import IconClose from 'react-icons/lib/fa/close'
 import IconDown from 'react-icons/lib/fa/arrow-down'
@@ -16,7 +16,6 @@ const style = require('./style.scss')
 @cssm(style)
 export default class SegmentObject extends SegmentPrototype {
   render() {
-
     const path = this.getPath();
     const value = this.props.value;
     const onChange = (value) => {
@@ -32,7 +31,6 @@ export default class SegmentObject extends SegmentPrototype {
     //     <label className=" control-label">
     //       {key}
     //       &nbsp;
-
 
 
     const childs = _.map(this.props.value, (value, key) => {
@@ -55,31 +53,54 @@ export default class SegmentObject extends SegmentPrototype {
           value,
         });
       }
-			const header = (
-				<div styleName="panel-heading">
-					{key}
-					<ButtonGroup bsSize='small'>
-						<EditorBemjsonModal bsStyle="default" changeName={true} onChange={onChange} value={value} path={path}>
-							<IconCode />
-						</EditorBemjsonModal>
-						<Button onClick={remove} bsStyle="danger" bsSize="small">
-							<IconClose />
-						</Button>
-					</ButtonGroup>
-    		</div>
-			)
-			const ifArray = schema.type === 'array'
-			const panelStyle = ifArray ? "info" : "default"
+      const ifArray = this.getSuperType(value) === 'array'
+      const panelStyle = ifArray ? 'panel-info' : 'panel-default'
       return (
-        <Panel key={key} bsStyle={panelStyle} header={header}>
-          <EditorBemjsonSegment
-						styleName="panel-body"
-            value={value}
-            path={path}
-            dispatch={this.props.dispatch}
-            schema={schema}
-          />
-        </Panel>
+        <div className={`panel ${panelStyle}`}>
+          <div className="panel-heading">
+            <h3 className="panel-title">
+              {key}
+              <div className="panel-controls">
+                <ButtonGroup bsSize="small">
+                  <EditorBemjsonModal
+                    bsStyle="default"
+                    onChange={onChange}
+                    value={value}
+                    path={path}
+                    changeName
+                  >
+                    <IconCode />
+                  </EditorBemjsonModal>
+                  <DropdownButton
+                    bsSize="small"
+                    bsStyle="warning"
+                    title={this.getSuperType(value)}
+                    id="TypeChanger"
+                  >
+                    <MenuItem eventKey="1">String</MenuItem>
+                    <MenuItem eventKey="2">Number</MenuItem>
+                    <MenuItem eventKey="3">Date</MenuItem>
+                    <MenuItem divider />
+                    <MenuItem eventKey="4">Object</MenuItem>
+                    <MenuItem eventKey="5">Array</MenuItem>
+                  </DropdownButton>
+                  <Button onClick={remove} bsStyle="danger" bsSize="small">
+                    <IconClose />
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </h3>
+          </div>
+          <div className="panel-body">
+            <EditorBemjsonSegment
+              styleName="panel-body"
+              value={value}
+              path={path}
+              dispatch={this.props.dispatch}
+              schema={schema}
+            />
+          </div>
+        </div>
       );
     })
 
@@ -91,26 +112,26 @@ export default class SegmentObject extends SegmentPrototype {
       });
     }
 
-    return <div styleName="obj-content">
+    return (<div styleName="obj-content">
       <h3>
         Object
-				<ButtonGroup bsSize='small'>
-					<Button bsStyle='default'>
+				<ButtonGroup bsSize="small">
+					<Button bsStyle="default">
 						<IconDown />
 					</Button>
-					<Button bsSize='small' bsStyle='default'>
+					<Button bsSize="small" bsStyle="default">
 						<IconPlus />
 					</Button>
-					<EditorBemjsonModal bsStyle='default' onChange={onChange} value={value} path={path}>
+					<EditorBemjsonModal bsStyle="default" onChange={onChange} value={value} path={path}>
 	          <IconCode />
 	        </EditorBemjsonModal>
 			  </ButtonGroup>
       </h3>
       {childs}
-			<hr/>
+			<hr />
 			<div className="obj-creator">
 				<ObjectPropCreator onSubmit={push} />
 			</div>
-    </div>
+    </div>)
   }
 }

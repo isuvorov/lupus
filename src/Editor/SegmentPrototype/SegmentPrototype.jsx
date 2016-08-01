@@ -32,8 +32,8 @@ export default class SegmentPrototype extends Component {
     return path
   }
 
-  getSuperType() {
-    const value = this.props.value
+  getSuperType(value = this.props.value) {
+    // const value = this.props.value
     if (_.isArray(value)) {
       return 'array'
     } else if (_.isPlainObject(value)) {
@@ -43,7 +43,6 @@ export default class SegmentPrototype extends Component {
   }
 
   getSample(schema) {
-
     let value
     if (schema.type === 'object') {
       value = {}
@@ -63,7 +62,7 @@ export default class SegmentPrototype extends Component {
     }
     return null
 
-    //value = []
+    // value = []
     //
     // return schema
     // this.getSuperType()

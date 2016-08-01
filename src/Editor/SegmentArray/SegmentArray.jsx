@@ -1,6 +1,5 @@
-import { Table, Button, ButtonGroup, PanelGroup, Panel } from 'react-bootstrap'
+import { Button, ButtonGroup, PanelGroup, Panel } from 'react-bootstrap'
 import _ from 'lodash'
-
 import IconClose from 'react-icons/lib/fa/close'
 import IconPlus from 'react-icons/lib/fa/plus'
 import IconArrowUp from 'react-icons/lib/fa/arrow-up'
@@ -14,12 +13,36 @@ const style = require('../SegmentObject/style.scss')
 
 @cssm(style)
 export default class SegmentArray extends SegmentPrototype {
+  constructor() {
+    super()
+    this.state = {
+      collapsed: [],
+    }
+    this.changeCollapse = this.changeCollapse.bind(this);
+  }
+  componentWillMount() {
+    this.genArr()
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.collapsed !== this.state.collapsed
+  }
+  genArr = () => {
+    let { collapsed } = this.state
+    collapsed = _.range(this.props.value.length).map(() => true)
+    this.setState({ collapsed })
+  }
+  changeCollapse = (key) => {
+    return () => {
+      const collapsed = _.clone(this.state.collapsed)
+      collapsed[key] = !collapsed[key]
+      this.setState({ collapsed })
+    }
+  }
   render() {
     const last = this.props.value.length - 1;
     const childs = _.map(this.props.value, (value, key) => {
       const path = this.getPath(key);
       const schema = this.getSchema(key);
-
       const up = () => {
         this.props.dispatch({
           type: 'editorSwap',
@@ -43,39 +66,48 @@ export default class SegmentArray extends SegmentPrototype {
           index: key,
         });
       }
-
-			const header = (
-				<div>
-					{`Object ${key}`}
-					<ButtonGroup styleName="btn-group" bsSize='small'>
-						<Button bsStyle="default" onClick={up} disabled={key === 0}>
-							<IconArrowUp />
-						</Button>
-						<Button bsStyle="default" onClick={down} disabled={key === last}>
-							<IconArrowDown />
-						</Button>
-						<Button bsStyle="danger" onClick={remove}>
-							<IconClose />
-						</Button>
-					</ButtonGroup>
-				</div>
-			)
-      // ЛЮБОЕ СЛОВО, ТЕЛО СЕГМЕНТА
-      return <PanelGroup styleName="panel-group" defaultActiveKey={0} accordion>
-	    <Panel header={header} eventKey={key}>
-				<EditorBemjsonSegment
-					value={value}
-					path={path}
-					dispatch={this.props.dispatch}
-					schema={schema}
-				/>
-			</Panel>
-	  </PanelGroup>
+      return <div className="panel panel-default">
+        <div className="panel-heading">
+          <h3 className="panel-title">
+            <Button
+              bsStyle="link"
+              onClick={this.changeCollapse(key)}
+            >{`Object ${key}`}</Button>
+            <div className="panel-controls">
+              <ButtonGroup styleName="btn-group" bsSize="small">
+                <Button bsStyle="default" onClick={up} disabled={key === 0}>
+                  <IconArrowUp />
+                </Button>
+                <Button bsStyle="default" onClick={down} disabled={key === last}>
+                  <IconArrowDown />
+                </Button>
+                <Button bsStyle="danger" onClick={remove}>
+                  <IconClose />
+                </Button>
+              </ButtonGroup>
+            </div>
+          </h3>
+        </div>
+        <div
+          key={key}
+          className="panel-body"
+          style={{
+            display: this.state.collapsed[key] ? 'none' : 'block',
+          }}
+        >
+          <EditorBemjsonSegment
+            value={value}
+            path={path}
+            dispatch={this.props.dispatch}
+            schema={schema}
+          />
+        </div>
+      </div>
     });
 
     const schema = this.getSchema(0)
     const push = () => {
-      const value = {}
+      // const value = {}
       this.props.dispatch({
         type: 'editorSet',
         path: this.getPath(this.props.value.length),
@@ -85,10 +117,10 @@ export default class SegmentArray extends SegmentPrototype {
     }
 
     return <div>
-        {childs}
-				<Button bsStyle="success" onClick={push} block>
-					<IconPlus /> Добавить элемент
-				</Button>
+      {childs}
+      <Button onClick={push} block>
+        <IconPlus /> Добавить элемент
+      </Button>
     </div>
   }
 }
