@@ -43,8 +43,8 @@ export default class SegmentPrototype extends Component {
   }
 
   getSample(schema) {
-
     let value
+    if (!schema || !schema.type) return null
     if (schema.type === 'object') {
       value = {}
       _.forEach(schema.properties || {}, (val, key) => {
@@ -63,7 +63,7 @@ export default class SegmentPrototype extends Component {
     }
     return null
 
-    //value = []
+    // value = []
     //
     // return schema
     // this.getSuperType()

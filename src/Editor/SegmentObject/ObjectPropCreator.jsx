@@ -1,5 +1,5 @@
 import { Component, PropTypes } from 'react'
-import { Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import { Row, Col, Button, ButtonGroup, DropdownButton, MenuItem } from 'react-bootstrap'
 import { autobind } from 'core-decorators';
 
 import linkState from 'react-link-state'
@@ -35,11 +35,29 @@ export default class ObjectPropCreator extends Component {
   render() {
     return <div>
         <input valueLink={linkState(this, 'key')} placeholder="Key" bsSize="small" className="form-control creator-key" />
-        <input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control creator-value" />
-				<input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control creator-type" />
-				<Button onClick={this.handleClick} bsStyle="primary" bsSize="small" className="creator-add">
-	        <IconPlus /> Добавить объект
-	      </Button>
+        <div>
+          <DropdownButton
+            bsSize="small"
+            className="creator-type"
+            title="string"
+            id="TypeChanger"
+          >
+            <MenuItem eventKey="1">string</MenuItem>
+            <MenuItem eventKey="2">number</MenuItem>
+            <MenuItem eventKey="3">date</MenuItem>
+            <MenuItem divider />
+            <MenuItem eventKey="4">object</MenuItem>
+            <MenuItem eventKey="5">array</MenuItem>
+          </DropdownButton>
+          <Button onClick={this.handleClick} bsStyle="primary" bsSize="small" className="creator-add">
+  	        <IconPlus />
+  	      </Button>
+        </div>
       </div>
+
+        {/*<input valueLink={linkState(this, 'value')}  placeholder="Value"  bsSize="small" className="form-control creator-value" />
+				<input valueLink={linkState(this, 'type')} placeholder="Type" bsSize="small" className="form-control creator-type" />
+
+      </div>*/}
   }
 }

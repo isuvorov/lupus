@@ -34,6 +34,13 @@ module.exports = ({ storiesOf, action }) => {
       />
     })
     .add('string', () => {
+      const value = 'string'
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('object string', () => {
       const value = {string: 'string'}
       return <EditorBemjsonSegment
         value={value}
