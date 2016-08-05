@@ -108,58 +108,6 @@
     "webpack-hot-middleware": "^2.10.0",
     "webpack-middleware": "^1.5.1"
   },
-  "babel": {
-    "presets": [
-      "react",
-      "node5",
-      "stage-0"
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          "rewire"
-        ]
-      }
-    },
-    "plugins": [
-      "jsx-control-statements",
-      "react-require",
-      "transform-decorators-legacy"
-    ]
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": "airbnb",
-    "globals": {
-      "__DEV__": true
-    },
-    "env": {
-      "browser": true
-    },
-    "rules": {
-      "no-confusing-arrow": 0,
-      "react/jsx-quotes": 0,
-      "jsx-quotes": [
-        2,
-        "prefer-double"
-      ]
-    }
-  },
-  "stylelint": {
-    "extends": "stylelint-config-standard",
-    "rules": {
-      "string-quotes": "single",
-      "selector-pseudo-class-no-unknown": [
-        true,
-        {
-          "ignorePseudoClasses": [
-            "global",
-            "local"
-          ]
-        }
-      ]
-    }
-  },
   "scripts": {
     "eslint": "eslint src tools",
     "stylelint": "stylelint \"src/**/*.css\"",
