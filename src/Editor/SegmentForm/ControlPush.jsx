@@ -11,17 +11,14 @@ export default class ControlPush extends SegmentPrototype {
 
   render() {
     return <div>
-      <If condition={this.props.actionAddProp}>
-
-        <ControlAddProp onSubmit={this.props.actionAddProp} />
-
+      <If condition={this.getValueType() === 'object'}>
+        <ControlAddProp onSubmit={this.actionAddProp} />
       </If>
-      <If condition={this.props.actionPush}>
-        <Button onClick={this.props.actionPush} block>
+      <If condition={this.getValueType() === 'array'}>
+        <Button onClick={this.actionPush} block>
           <IconPlus /> Добавить элемент
         </Button>
       </If>
     </div>
   }
-
 }

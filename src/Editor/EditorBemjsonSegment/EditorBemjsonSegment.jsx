@@ -36,14 +36,6 @@ export default class EditorBemjsonSegment extends SegmentPrototype {
 
   render() {
     const Class = this.getRenderComponent()
-
-    // if (this.props.wrap !== false) {
-    //   return <SegmentObjectElement {...this.props}>
-    //     <Class {...this.props} />
-    //   </SegmentObjectElement>
-    // }
-    return <Class {...this.props}  />
-
-    // return <div className="EditorBemjsonSegment">{content}</div>
+    return <Class {...this.props} />
   }
 }

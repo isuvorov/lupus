@@ -20,7 +20,7 @@ export function editorSet(originState, action) {
   return state
 }
 
-export function editorRemove(originState, action) {
+export function editorRemoveProp(originState, action) {
   const state = _.cloneDeep(originState)
   const command = 'delete state' + path(action.path) + ';'
   eval(command) // eslint-disable-line
@@ -33,6 +33,15 @@ export function editorRemoveElement(originState, action) {
   eval(command) // eslint-disable-line
   return state
 }
+
+// export function editorRemove(originState, action) {
+//   const key = action.path[action.path.length - 1]
+//   if (typeof key === 'number') {
+//     action.slice
+//     return editorRemoveElement(originState, action)
+//   }
+//   return editorRemoveProp(originState, action)
+// }
 
 export function editorSwap(originState, action) {
   const state = _.cloneDeep(originState)
@@ -56,10 +65,17 @@ export default function (state = {}, action) {
       return editorSwap(state, action)
     case 'editorSet':
       return editorSet(state, action)
+    // case 'editorRemove':
+      // return editorRemove(state, action)
     case 'editorRemove':
-      return editorRemove(state, action)
-    case 'editorRemoveElement':
-      return editorRemoveElement(state, action)
+      const key = action.path[action.path.length - 1]
+      if (typeof key === 'number') {
+        action.path = action.path.slice(0, action.path.length - 1)
+        return editorRemoveElement(state, action)
+      }
+      return editorRemoveProp(state, action)
+      // return editorRemoveProp(state, action)
+      // return editorRemoveElement(state, action)
     default:
       return state;
   }

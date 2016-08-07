@@ -145,14 +145,22 @@ export default class App extends Component {
     this.setState({ newProject: e.target.value });
   }
 
+
   @autobind
-  handleSubmit(json) {
+  handleChangeProject(project) {
+    this.setState({
+      project
+    })
+  }
+
+  @autobind
+  handleSave() {
     fetch(`http://localhost:3000/api/projects/${this.state.project._id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(json),
+      body: JSON.stringify(this.state.project),
     })
     .then((res) => res.json())
     .then((obj) => {
@@ -246,12 +254,16 @@ export default class App extends Component {
                       </tr>
                     </For>
                   </tbody>
+                  <Button bsStyle='success' onClick={this.handleSave}>
+                    Сохранить
+                  </Button>
                 </Table>
               </div>
               <div styleName="inner">
                 <EditorBemjson
                   value={this.state.project}
                   schema={schema}
+                  onChange={this.handleChangeProject}
                   onSubmit={this.handleSubmit}
                 />
               </div>

@@ -3,6 +3,7 @@ import {
   ButtonGroup,
   DropdownButton,
   MenuItem,
+  Label,
 } from 'react-bootstrap'
 import IconCode from 'react-icons/lib/fa/code'
 import IconDown from 'react-icons/lib/fa/arrow-down'
@@ -17,49 +18,48 @@ import CSSModules from '~/utils/CSSModules'
 @CSSModules(require('./ControlEdit.css')) //
 export default class ControlEdit extends SegmentPrototype {
   render() {
-    const parent = this.props.parent
     const child = this.props
-    // const actions = this.props.actions
-    // const specialActions = this.props.specialActions
-    const actions = this.props
-    const specialActions = this.props
     const bsSize = this.props.bsSize || 'xsmall'
     const key = child.path[child.path.length - 1]
 
     return <ButtonGroup bsSize={bsSize}>
-      <If condition={actions.actionSet && this.isComplexType()}>
+      <Button bsStyle='primary'>
+        {this.getFormat()}
+        {/* <Label bsStyle="warning">!{this.getFormat()}</Label> */}
+      </Button>
+      <If condition={this.isComplexType()}>
         <EditorBemjsonModal
           bsStyle="info"
           bsSize={bsSize}
           bsSize="xsmall"
           {...child}
-          onChange={actions.actionSet}
+          onChange={this.actionSet}
         >
           <IconCode />
         </EditorBemjsonModal>
       </If>
 
-      <If condition={specialActions.actionUp}>
+      <If condition={this.getParentValueType() === 'array'}>
         <Button
           bsStyle="default"
           bsSize={bsSize}
-          onClick={specialActions.actionUp}
+          onClick={this.actionUp}
           disabled={key === 0}
         >
           {child.key}
           <IconUp />
         </Button>
-      </If>
-      <If condition={specialActions.actionDown}>
         <Button
           bsStyle="default"
           bsSize={bsSize}
-          onClick={specialActions.actionDown}
-          disabled={key=== parent.value.length - 1}
+          onClick={this.actionDown}
+          disabled={key=== this.props.parentLength - 1}
         >
           <IconDown />
         </Button>
       </If>
+
+
       {/* <If condition={actions.actionAddProp}>
         <Button bsStyle="default" bsSize={bsSize} bsSize="xsmall" onClick={actions.actionAddProp}>
           <IconPlus />
@@ -86,53 +86,49 @@ export default class ControlEdit extends SegmentPrototype {
         <MenuItem divider />
         <MenuItem eventKey="4">Object</MenuItem>
         <MenuItem eventKey="5">Array</MenuItem> */}
-
-        <If condition={actions.actionAddProp}>
-          <MenuItem bsStyle="default" bsSize={bsSize} bsSize="xsmall" onClick={actions.actionAddProp}>
+        <If condition={this.getParentValueType() === 'object'}>
+          <MenuItem bsStyle="default" bsSize={bsSize} bsSize="xsmall" onClick={this.actionAddProp}>
             <IconPlus /> Добавить свойство
           </MenuItem>
         </If>
-        <If condition={actions.actionPush}>
-          <MenuItem bsStyle="default" bsSize={bsSize} bsSize="xsmall" onClick={actions.actionPush}>
+        <If condition={this.getParentValueType() === 'array'}>
+          <MenuItem bsStyle="default" bsSize={bsSize} bsSize="xsmall" onClick={this.actionPush}>
             <IconPlus />Добавить элемент
           </MenuItem>
         </If>
-        <If condition={actions.actionSet}>
-          <EditorBemjsonModal
-            bsStyle="info"
-            bsSize={bsSize}
-            bsSize="xsmall"
-            {...child}
-            onChange={actions.actionSet}
-          >
-            <IconCode /> Изменить
-          </EditorBemjsonModal>
-        </If>
+        <EditorBemjsonModal
+          bsStyle="info"
+          bsSize={bsSize}
+          bsSize="xsmall"
+          {...child}
+          onChange={this.actionSet}
+        >
+          <IconCode /> Изменить
+        </EditorBemjsonModal>
         <MenuItem divider />
-        <If condition={specialActions.actionUp}>
+        <If condition={this.getParentValueType() === 'array'}>
           <MenuItem
             bsStyle="default"
             bsSize={bsSize}
-            onClick={specialActions.actionUp}
+            onClick={this.actionUp}
             disabled={key === 0}
           >
             {child.key}
             <IconUp /> Передвинуть выше
           </MenuItem>
-        </If>
-        <If condition={specialActions.actionDown}>
           <MenuItem
             bsStyle="default"
             bsSize={bsSize}
-            onClick={specialActions.actionDown}
-            disabled={key=== parent.value.length - 1}
+            onClick={this.actionDown}
+            disabled={key === this.props.parentLength - 1}
           >
             <IconDown /> Передвинуть ниже
           </MenuItem>
         </If>
         <MenuItem divider />
-        <If condition={specialActions.actionRemove}>
-          <MenuItem bsStyle="danger" bsSize={bsSize} onClick={specialActions.actionRemove}>
+
+        <If condition={!this.isHashRoot() && (this.getParentValueType() === 'array' || this.getParentValueType() === 'object')}>
+          <MenuItem bsStyle="danger" bsSize={bsSize} onClick={this.actionRemove}>
             <IconClose /> Удалить
           </MenuItem>
         </If>

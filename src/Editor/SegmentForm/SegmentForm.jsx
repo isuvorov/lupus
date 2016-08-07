@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import {
-    Button,
+  Button,
   FormGroup,
   ControlLabel,
+  FormControl,
+  HelpBlock,
 } from 'react-bootstrap'
 
 
@@ -16,31 +18,24 @@ import CSSModules from '~/utils/CSSModules'
 export default class SegmentForm extends SegmentPrototype {
 
   render() {
+    // console.log('render SegmentForm');
     return <div styleName="root">
       {
         _.map(this.props.value, (value, key) => {
-          const child = this.getChildProps(key)
+          const child = this.getChild(key)
           const type = this.getValueType(key)
-          if (this.isComplexType(key)) {
+          if (child.isComplexType()) {
             return <div
               className={"panel " + (type === 'array' ? 'panel-warning' : 'panel-default')}
               styleName={`panel panel_type_${type}`}
             >
               <h3 className="panel-heading" styleName="heading">
-                {/* <h3 className="panel-title"> */}
-                  <span styleName="title">
-                    {child.title}
-                  </span>
-                  {/* <Button
-                    bsStyle="link"
-                    // onClick={this.changeCollapse(key)}
-                  >
-                    {child.title}
-                  </Button> */}
-                  <span styleName="controlEdit">
-                    <ControlEdit {...child} bsSize='small' />
-                  </span>
-                {/* </h3> */}
+                <span styleName="title">
+                  {child.getTitle()}
+                </span>
+                <span styleName="controlEdit">
+                  <ControlEdit {...child.props} bsSize='small' />
+                </span>
               </h3>
               <div
                 key={key}
@@ -50,9 +45,15 @@ export default class SegmentForm extends SegmentPrototype {
                   display: false ? 'none' : 'block',
                 }}
               >
+                <p styleName="description">
+                  {child.getDescription()}
+                </p>
                 <EditorBemjsonSegment
-                  {...child}
+                  {...child.props}
                 />
+              </div>
+              <div className="panel-footer" >
+                <ControlPush {...child.props} />
               </div>
             </div>
           }
@@ -65,22 +66,21 @@ export default class SegmentForm extends SegmentPrototype {
             <ControlLabel style={{width:'100%'}}>
               <div>
                 <span>
-                  {child.title}
+                  {child.getTitle()}
                 </span>
                 <span style={{float:'right'}}>
-                  <ControlEdit {...child} />
+                  <ControlEdit {...child.props} />
                 </span>
               </div>
             </ControlLabel>
             <EditorBemjsonSegment
-              {...child}
+              {...child.props}
             />
-            {/* <FormControl.Feedback />
-            <HelpBlock>Validation is based on string length.</HelpBlock> */}
+            <FormControl.Feedback />
+            <HelpBlock>{child.getDescription()}</HelpBlock>
           </FormGroup>
         })
       }
-      <ControlPush {...this.props} />
     </div>
   }
 }

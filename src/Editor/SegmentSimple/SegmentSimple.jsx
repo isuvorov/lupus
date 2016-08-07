@@ -4,8 +4,9 @@ import { Label, DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class SegmentSimple extends SegmentPrototype {
   render() {
+    // console.log('render simple');
     const handleChange = value => {
-      this.props.actionSet(value)
+      this.actionSetDebounced(value)
     }
 
     const type = typeof this.props.value === 'Number' ? 'number' : 'text'

@@ -1,7 +1,6 @@
 import SegmentPrototype from '../SegmentPrototype'
-import TextareaDebounce from '../InputDebounce/TextareaDebounce'
 
-export default class SegmentTextarea extends SegmentPrototype {
+export default class SegmentHidden extends SegmentPrototype {
   render() {
     const handleChange = value => {
       this.props.dispatch({
@@ -13,7 +12,7 @@ export default class SegmentTextarea extends SegmentPrototype {
     const schema = this.props.schema || {}
     const rows = schema.options && schema.options.rows || 7
     return <div>
-      <TextareaDebounce
+      <InputDebounce
         type="textarea"
         className="form-control"
         ref="input"

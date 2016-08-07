@@ -154,8 +154,87 @@ module.exports = ({ storiesOf, action }) => {
       />
     })
     .add('project', () => {
+      const schema = {
+        title: 'Проект',
+        type: 'object',
+        description: 'Docker project',
+        required: ['name'],
+        additionalProperties: false,
+        properties: {
+          id: {
+            title: 'ID',
+            type: 'string',
+            format: 'hidden',
+          },
+          active: {
+            type: 'boolean',
+          },
+          base: {
+            type: 'string',
+            title: 'Базовый проект',
+            description: 'Базовый проект, от которого наследуемся',
+          },
+          name: {
+            type: 'string',
+            title: 'Имя проекта',
+            description: 'латинские символы нижнего регистра',
+          },
+          files: {
+            type: 'array',
+            title: 'Файлы',
+            items: {
+              type: 'object',
+              title: 'Файл',
+              properties: {
+                name: {
+                  type: 'string',
+                  title: 'Название',
+                  description: 'Название файла',
+                },
+                content: {
+                  type: 'string',
+                  title: 'Контент',
+                  description: 'Контент файла',
+                  format: 'textarea',
+                },
+              }
+            }
+          },
+          tasks: {
+            type: 'array',
+            title: 'Задачи',
+            items: {
+              type: 'object',
+              title: 'Задача',
+              // description: 'Задача',
+              properties: {
+                name: {
+                  type: 'string',
+                  title: 'Название',
+                },
+                content: {
+                  type: 'string',
+                  title: 'Контент',
+                  // description: 'Контент задачи',
+                  format: 'textarea',
+                  ui: {
+                    format: 'textarea',
+
+                  },
+                },
+                type: {
+                  type: 'string',
+                  title: 'Тип',
+                  // description: 'Название задачи',
+                },
+              }
+            }
+          },
+        }
+      }
       return <EditorBemjson
         value={project}
+        schema={schema}
         onChange={action('onChange')}
         onSubmit={action('onSubmit')}
       />

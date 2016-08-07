@@ -1,6 +1,12 @@
 import { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import { debounce } from 'core-decorators';
+import { autobind, debounce } from 'core-decorators'
+
+function equal(a, b){
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+
 
 export default class SegmentPrototype extends Component {
 
@@ -12,43 +18,70 @@ export default class SegmentPrototype extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true
-    if (JSON.stringify(nextProps) !== JSON.stringify(this.props)) return true
-    if (JSON.stringify(nextProps.value) === JSON.stringify(this.props.value)) return false
+    if(!(!equal(nextState, this.state) || !equal(nextProps, this.props))) return false
+    // console.log('nextProps', nextProps, 'this.props', this.props);
     return true
   }
 
-  //
-  // dispatch(action) {
-  //   if (this.props.dispatch) {
-  //     this.props.dispatch(action)
-  //   } else {
-  //     console.log('dispatch', action);
-  //   }
-  // }
-  //
-  // @debounce(300)
-  // handleChangeDebounced(value) {
-  //   this.props.dispatch({
-  //     type: 'editorSet',
-  //     path: this.props.path,
-  //     value,
-  //   });
-  // }
 
-  getPath(...keys) {
+  isHashRoot() {
+    return this.getPath()[0] === '#' && this.getPath().length === 1 || this.getPath().length === 0
+  }
+  // For child methods
+  getChildKey() {
+    return this.props.path[this.props.path.length - 1]
+  }
+  getChildValue(key) {
+    return this.props.value[key]
+  }
+  getChildSchema(key) {
+    if (!this.props.schema) return null
+    const schema = this.props.schema
+    if (key === null) return schema
+    if (schema.properties) {
+      return schema.properties[key]
+    }
+    if (schema.items) {
+      return schema.items
+    }
+    return null
+  }
+  getParentPath() {
+    return this.props.path.slice(0, -1)
+  }
+  getChildPath(...keys) {
     const path = this.props.path ? _.clone(this.props.path) : []
     keys.forEach(key => path.push(key))
     return path
   }
-
-  getValue(key = null) {
-    if (key === null) return this.props.value
-    return this.props.value[key]
+  getChildProps2(key) {
+    return {
+      // path,
+      // schema,
+      // value,
+      // parent: this.props,
+      dispatch: this.props.dispatch,
+      // ...this.getSpecialActions(key),
+      // ...this.getActions(key),
+      // specialActions: this.getSpecialActions(key),
+      // actions: this.getActions(key),
+      parentLength: _.isArray(this.props.value) ? this.props.value.length : null,
+      rootSchema: this.props.rootSchema,
+      path: this.getChildPath(key),
+      value: this.getChildValue(key),
+      schema: this.getChildSchema(key),
+    }
+  }
+  getChild(key) {
+    return new SegmentPrototype(this.getChildProps2(key))
   }
 
-  getValueType(key) {
-    const value = this.getValue(key)
+  // For node methods
+  getParentValueType() {
+    return typeof this.getChildKey() === 'number' ? 'array' : 'object'
+  }
+  getValueType() {
+    const value = this.props.value
     if (_.isArray(value)) {
       return 'array'
     } else if (_.isPlainObject(value)) {
@@ -56,17 +89,11 @@ export default class SegmentPrototype extends Component {
     }
     return 'simple'
   }
-
-  getSuperType(value = this.props.value) {
-    // const value = this.props.value
-    if (_.isArray(value)) {
-      return 'array'
-    } else if (_.isPlainObject(value)) {
-      return 'object'
-    }
-    return 'simple'
+  getType() {
+    const schema = this.getSchema()
+    if (!schema) return null
+    return schema.type
   }
-
   getSample(schema) {
     let value
     if (!schema || !schema.type) return null
@@ -87,18 +114,121 @@ export default class SegmentPrototype extends Component {
       return ''
     }
     return null
+  }
+  getFormat() {
+    const schema = this.props.schema
+    if (schema && schema.format) return schema.format
+    switch (this.getValueType()) {
+      case 'array':
+      case 'object':
+        return 'form'
+      default:
+        return 'simple'
+    }
+  }
+  getTitle() {
+    const schema = this.props.schema
+    if (schema && schema.title) return schema.title
+    return this.getChildKey()
+  }
+  getDescription() {
+    const schema = this.props.schema
+    if (schema && schema.description) return schema.description
+    return null
+  }
 
-    // value = []
-    //
-    // return schema
-    // this.getSuperType()
+  isComplexType(key) {
+    return this.getValueType(key) !== 'simple'
+  }
+
+  @autobind
+  actionSet(value) {
+    this.props.dispatch({
+      type: 'editorSet',
+      path: this.props.path,
+      value,
+    });
+  }
+
+  @autobind
+  // @debounce(100)
+  actionSetDebounced(value) {
+    // console.log('actionSetDebounced');
+    this.props.dispatch({
+      type: 'editorSet',
+      path: this.props.path,
+      value,
+    });
+  }
+  @autobind
+  actionPush() {
+    const key = this.props.value.length
+    const schema = this.getChildSchema(key)
+    this.props.dispatch({
+      type: 'editorSet',
+      path: this.getChildPath(key),
+      value: this.getSample(schema),
+    });
+  }
+  @autobind
+  actionAddProp(pack) {
+    const key = pack.key
+    const schema = this.getChildSchema(key)
+    const value = pack.value || this.getSample(schema)
+    this.props.dispatch({
+      type: 'editorSet',
+      path: this.getChildPath(key),
+      value,
+    });
+  }
+  @autobind
+  actionUp() {
+    const key = this.getChildKey()
+    const path = this.getParentPath()
+    this.props.dispatch({
+      type: 'editorSwap',
+      path: [...path, key],
+      pathTo: [...path, key - 1],
+    })
+  }
+  @autobind
+  actionDown() {
+    const key = this.getChildKey()
+    const path = this.getParentPath()
+    this.props.dispatch({
+      type: 'editorSwap',
+      path: [...path, key],
+      pathTo: [...path, key + 1],
+      // path: this.getPath(key),
+      // pathTo: this.getPath(key + 1),
+    })
+  }
+  @autobind
+  actionRemove() {
+    this.props.dispatch({
+      type: 'editorRemove',
+      path: this.props.path,
+    });
+  }
+  getPath(...keys) {
+    const path = this.props.path ? _.clone(this.props.path) : []
+    keys.forEach(key => path.push(key))
+    return path
+  }
+
+  getValue(key = null) {
+    if (key === null) return this.props.value
+    return this.props.value[key]
+  }
+
+  getSuperType(value = this.props.value) {
     // const value = this.props.value
-    // if (_.isArray(value)) {
-    //   return 'array'
-    // } else if (_.isPlainObject(value)) {
-    //   return 'object'
-    // }
-    // return 'simple'
+    if (_.isArray(value)) {
+      return 'array'
+    } else if (_.isPlainObject(value)) {
+      return 'object'
+    }
+    return 'simple'
   }
 
   getSchema(key = null) {
@@ -116,149 +246,5 @@ export default class SegmentPrototype extends Component {
     return schema
   }
 
-  getType() {
-    const schema = this.getSchema()
-    if (!schema) return null
-    return schema.type
-  }
-
-  getFormat() {
-    const schema = this.getSchema()
-    if (!schema) return null
-    return schema.format
-  }
-
-  isComplexType(key) {
-    return this.getValueType(key) !== 'simple'
-    console.log(key, this.getSuperType(key), this.getValueType(key) !== 'simple');
-    return true
-    return this.getSuperType(key) !== 'simple'
-  }
-
-  getActions(key) {
-    const dispatch = this.props.dispatch
-    const actionSet = (value) => {
-      dispatch({
-        type: 'editorSet',
-        path: this.getPath(key),
-        value,
-      });
-    }
-    // const actionSetDebounced = debounce(300)(actionSet)
-    const actionSetDebounced = actionSet
-    switch (this.getValueType(key)) {
-      case 'array':
-        return {
-          actionPush: () => {
-            const key2 = this.getValue(key).length
-            const schema = this.getSchema(key, key2)
-            console.log(key, key2, {
-              type: 'editorSet',
-              path: this.getPath(key, key2),
-              value: this.getSample(schema),
-            });
-            dispatch({
-              type: 'editorSet',
-              path: this.getPath(key, key2),
-              value: this.getSample(schema),
-            });
-          },
-          actionSet,
-        }
-      case 'object':
-        return {
-          actionAddProp: (pack) => {
-            const key2 = pack.key
-            const value = pack.value || this.getSample(schema)
-            const schema = this.getSchema(key, key2)
-            dispatch({
-              type: 'editorSet',
-              path: this.getPath(key, key2),
-              value,
-            });
-            return;
-            console.log({
-              type: 'editorSet',
-              path: this.getPath(key, key2),
-              value,
-            });
-            dispatch({
-              type: 'editorSet',
-              path: this.getPath(key, key2),
-              value,
-            });
-          },
-          actionSet,
-        }
-      case 'simple':
-      default:
-        return {
-          actionSet: actionSetDebounced,
-        }
-    }
-  }
-  getSpecialActions(key) {
-    const dispatch = this.props.dispatch
-    const parentType = this.getValueType()
-    switch (parentType) {
-      case 'array':
-        return {
-          actionUp: () => {
-            dispatch({
-              type: 'editorSwap',
-              path: this.getPath(key),
-              pathTo: this.getPath(key - 1),
-            })
-          },
-          actionDown: () => {
-            this.props.dispatch({
-              type: 'editorSwap',
-              path: this.getPath(key),
-              pathTo: this.getPath(key + 1),
-            });
-          },
-          actionRemove: () => {
-            this.props.dispatch({
-              type: 'editorRemoveElement',
-              path: this.props.path,
-              index: key,
-            });
-          },
-        }
-      case 'object':
-        if (!this.props.path || !this.props.path.length || !this.props.path.length === 1) {
-          return {}
-        }
-        return {
-          // actionAddProp: () => {},
-          actionRemove: () => {
-            this.props.dispatch({
-              type: 'editorRemove',
-              path: this.getPath(key),
-            });
-          },
-        }
-      default:
-        return {}
-    }
-  }
-
-  getChildProps(key) {
-    const path = this.getPath(key)
-    const schema = this.getSchema(key)
-    const value = this.getValue(key)
-    return {
-      title: 'Title: ' + path.join('/'),
-      path,
-      schema,
-      value,
-      parent: this.props,
-      dispatch: this.props.dispatch,
-      ...this.getSpecialActions(key),
-      ...this.getActions(key),
-      specialActions: this.getSpecialActions(key),
-      actions: this.getActions(key),
-    }
-  }
 
 }

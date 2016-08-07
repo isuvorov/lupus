@@ -12,70 +12,77 @@ import { connect } from 'react-redux'
 
 export class EditorBemjsonRoot extends Component {
 
-  @autobind
-  handleClickSave() {
-    this.props.onSubmit && this.props.onSubmit(this.props.value)
-  }
+  // @autobind
+  // handleClickSave() {
+  //   this.props.onSubmit && this.props.onSubmit(this.props.value)
+  // }
 
   render() {
     const key = '#'
     const value = {
       '#': this.props.value,
     }
-    if (this.props.schema) {
-      value['@'] = this.props.schema
+    const schema = {
+      type: 'object',
+      properties: {
+        '#': this.props.schema
+      }
     }
+    // if (this.props.schema) {
+    //   value['@'] = this.props.schema
+    // }
     const child = {
-      title: 'Title',
       ...this.props,
+      schema: schema,
+      rootSchema: schema,
       value,
       path: [],
     }
     return <EditorBemjsonSegment
       {...child}
     />
-
-    return <SegmentForm
-      child
-    />
-
-    return <div className="panel panel-primary" styleName="panel">
-      <h3 className="panel-heading" styleName="heading">
-          <span styleName="title">
-            {child.title}
-          </span>
-          <span styleName="controlEdit">
-            <ControlEdit {...child} bsSize='small' />
-          </span>
-      </h3>
-      <div
-        key={key}
-        className="panel-body"
-        styleName="body"
-        style={{
-          display: false ? 'none' : 'block',
-        }}
-      >
-        <EditorBemjsonSegment
-          {...child}
-        />
-      </div>
-    </div>
-
-    return <div>
-
-
-      <h1>Editor</h1>
-      [controls]
-      <EditorBemjsonSegment
-        value={this.props.value}
-        schema={this.props.schema}
-        dispatch={this.props.dispatch}
-      />
-      <Button onClick={this.handleClickSave} bsStyle='success'>
-          Сохранить
-      </Button>
-    </div>
+    //
+    // return <SegmentForm
+    //   child
+    // />
+    //
+    // return <div className="panel panel-primary" styleName="panel">
+    //   <h3 className="panel-heading" styleName="heading">
+    //       <span styleName="title">
+    //         {child.title}
+    //       </span>
+    //       <span styleName="controlEdit">
+    //         <ControlEdit {...child} bsSize='small' />
+    //       </span>
+    //   </h3>
+    //   <div
+    //     key={key}
+    //     className="panel-body"
+    //     styleName="body"
+    //     style={{
+    //       display: false ? 'none' : 'block',
+    //     }}
+    //   >
+    //     <EditorBemjsonSegment
+    //       {...child}
+    //     />
+    //   </div>
+    // </div>
+    //
+    // return <div>
+    //
+    //
+    //   <h1>Editor</h1>
+    //   [controls]
+    //   <EditorBemjsonSegment
+    //     value={this.props.value}
+    //     schema={this.props.schema}
+    //     dispatch={this.props.dispatch}
+    //   />
+    //   <Button onClick={this.handleClickSave} bsStyle='success'>
+    //       Сохранить
+    //   </Button>
+    // </div>
   }
 }
 
