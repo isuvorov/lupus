@@ -1,13 +1,14 @@
-import React, { Component, PropTypes } from 'react'
+import { Component, PropTypes } from 'react'
+import s from './Wrapper.css';
+
 // import emptyFunction from 'fbjs/lib/emptyFunction';
-// import s from './App.css';
 // import Header from '../Header';
 // import Feedback from '../Feedback';
 // import Footer from '../Footer';
 
 const emptyFunction = () => {}
 
-class App extends Component {
+class Wrapper extends Component {
 
   static propTypes = {
     context: PropTypes.shape({
@@ -36,8 +37,7 @@ class App extends Component {
 
   componentWillMount() {
     const { insertCss } = this.props.context;
-    console.log({insertCss});
-    // this.removeCss = insertCss(s);
+    this.removeCss = insertCss(s);
   }
 
   componentWillUnmount() {
@@ -45,11 +45,8 @@ class App extends Component {
   }
 
   render() {
-    return <div>
-      RENDER
-    </div>
+    return <div>{this.props.children || '???'}</div>
   }
-
 }
 
-export default App;
+export default Wrapper;

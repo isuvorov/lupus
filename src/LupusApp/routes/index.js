@@ -2,7 +2,7 @@ import App from '../components/App'
 import Wrapper from './Wrapper'
 
 const project = {
-  "_id": "578752bbf1f2f80ae6e18765",
+  "_id": "578752bqweqwbf1f2f80ae6e18765",
   repos: {
     src: "https://github.com/mgbeta/chat"
   },
@@ -21,12 +21,28 @@ const project = {
     "foo": "bar"
   }
 }
+
+const home = {
+  path: '/',
+
+  children: [
+  ],
+
+  async action() {
+    return <App
+      projects={[project]}
+    />
+  },
+
+}
+
+
 export default {
 
   path: '/',
 
   children: [
-    // home,
+    home,
     // contact,
     // login,
     // register,
@@ -35,25 +51,13 @@ export default {
   ],
 
   async action({ next, render, context }) {
-    // const component = await next();
-    // if (component === undefined) return component;
-    // <App
-    //   projects={projects}
-    //   onChange={action('onChange')}
-    //   onSubmit={action('onSubmit')}
-    // />
+    const component = await next();
     return render(
-      <div>
-        {/*Test*/}
-        <Wrapper>
-          Wrapper!!!
-          {/*<App
-            projects={[project]}
-          />*/}
-        </Wrapper>
-        {/*Div*/}
-        {/*<App context={context}>{component}</App>*/}
-      </div>
+      <Wrapper context={context}>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" />
+        {component}
+      </Wrapper>
     );
   },
 

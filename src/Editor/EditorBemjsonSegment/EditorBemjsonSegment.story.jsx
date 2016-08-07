@@ -14,25 +14,53 @@ module.exports = ({ storiesOf, action }) => {
         dispatch={action('dispatch')}
       />
     })
-    .add('Default', () => {
+    .add('Default2', () => {
+      const obj = {
+        int: 123,
+        float: 123.45,
+        string: 'Test string',
+      }
       const value = {
         int: 123,
         float: 123.45,
         string: 'Test string',
+        subObject: obj,
         intArray: [0, 1, 2, 3, 4, 5],
+        objectsArray: [obj, obj, obj],
       }
       return <EditorBemjsonSegment
         value={value}
         dispatch={action('dispatch')}
       />
     })
+
     .add('int', () => {
-      const value = {int: 123}
+      const value = 123
+      const schema = {
+        title: 'Число',
+        type: 'number',
+        format: 'number',
+      }
       return <EditorBemjsonSegment
         value={value}
+        schema={schema}
         dispatch={action('dispatch')}
       />
     })
+    .add('int controls', () => {
+      const value = 123
+      const schema = {
+        title: 'Число',
+        type: 'number',
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        schema={schema}
+        controls={true}
+        dispatch={action('dispatch')}
+      />
+    })
+
     .add('string', () => {
       const value = 'string'
       return <EditorBemjsonSegment
@@ -42,6 +70,20 @@ module.exports = ({ storiesOf, action }) => {
     })
     .add('object string', () => {
       const value = {string: 'string'}
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('array string', () => {
+      const value = ['string1', 'string2', 'string3',]
+      return <EditorBemjsonSegment
+        value={value}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('array string element', () => {
+      const value = 'string1'
       return <EditorBemjsonSegment
         value={value}
         dispatch={action('dispatch')}
@@ -61,7 +103,7 @@ module.exports = ({ storiesOf, action }) => {
     })
     .add('object textarea', () => {
       const value = {
-        textarea: 'textarea\n\ttextarea\n\t\ttextarea'
+        textarea: 'textarea\n\ttextarea\n\t\ttextarea',
       }
       const schema = {
         type: 'object',
@@ -69,8 +111,26 @@ module.exports = ({ storiesOf, action }) => {
           textarea: {
             type: 'string',
             format: 'textarea',
-          }
-        }
+          },
+        },
+      }
+      return <EditorBemjsonSegment
+        value={value}
+        schema={schema}
+        dispatch={action('dispatch')}
+      />
+    })
+    .add('array of int', () => {
+      const value = [
+        1,
+        'textarea2\n\ttextarea2\n\t\ttextarea2',
+      ]
+      const schema = {
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'textarea',
+        },
       }
       return <EditorBemjsonSegment
         value={value}

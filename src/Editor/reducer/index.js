@@ -1,7 +1,9 @@
 import _ from 'lodash'
 
 function path(pathArray) {
-  const pathEval = pathArray.map((val) => {
+  // if (pathArray.length === 0) return ''
+  const pathEval = pathArray.map((val, index) => {
+    if (index === 0 && val === '#') return '\'value\''
     if (typeof val === 'string') {
       return `'${val}'`;
     }
@@ -12,7 +14,7 @@ function path(pathArray) {
 
 export function editorSet(originState, action) {
   const state = _.cloneDeep(originState)
-  const pathStr = path(['value', ...action.path])
+  const pathStr = path(action.path)
   const command = `state${pathStr}=${JSON.stringify(action.value)}`
   eval(command) // eslint-disable-line
   return state
@@ -20,28 +22,29 @@ export function editorSet(originState, action) {
 
 export function editorRemove(originState, action) {
   const state = _.cloneDeep(originState)
-  const command = 'delete state.value' + path(action.path) + ';'
+  const command = 'delete state' + path(action.path) + ';'
   eval(command) // eslint-disable-line
   return state
 }
 
 export function editorRemoveElement(originState, action) {
   const state = _.cloneDeep(originState)
-  const command = 'state.value' + path(action.path) + '.splice(' + action.index + ', 1);'
+  const command = 'state' + path(action.path) + '.splice(' + action.index + ', 1);'
   eval(command) // eslint-disable-line
   return state
 }
 
 export function editorSwap(originState, action) {
   const state = _.cloneDeep(originState)
-  var value = null // eslint-disable-line
-  eval('value = state.value' + path(action.path) + ';') // eslint-disable-line
-  eval('state.value' + path(action.path) + ' = state.value' + path(action.pathTo) + ' ;') // eslint-disable-line
-  eval('state.value' + path(action.pathTo) + ' = value;') // eslint-disable-line
+  var cache = null // eslint-disable-line
+  eval('cache = state' + path(action.path) + ';') // eslint-disable-line
+  eval('state' + path(action.path) + ' = state' + path(action.pathTo) + ' ;') // eslint-disable-line
+  eval('state' + path(action.pathTo) + ' = cache;') // eslint-disable-line
   return state;
 }
 
 export default function (state = {}, action) {
+  console.log('state, action', state, action);
   switch (action.type) {
     case 'init':
       return {

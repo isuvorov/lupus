@@ -90,29 +90,29 @@ export default class EditorBemjsonModal extends Component {
   render() {
     return (<Button
       bsStyle={this.props.bsStyle || 'primary'}
-      bsSize="small"
+      bsSize={this.props.bsSize || 'small'}
       onClick={this.open}
     >
         {this.props.children}
 				<Modal show={this.state.showModal} onHide={this.close}>
 	        <Modal.Header closeButton>
-	          <Modal.Title>Редактирование {['#', ...this.props.path].join('/')}</Modal.Title>
+	          <Modal.Title>Редактирование {this.props.path.join('/')}</Modal.Title>
 	        </Modal.Header>
 	        <Modal.Body>
 	          <If condition={this.props.changeName}>
 	            <Input
-  type="input"
-  label="Name"
-  onChange={this.handleChange('name')}
-  value={this.state.name}
-	            />
-	          </If>
-	          <Input
-  type="textarea"
-  label="Value"
-  onChange={this.handleChange('str')}
-  value={this.state.str}
-  rows={8}
+                type="input"
+                label="Name"
+                onChange={this.handleChange('name')}
+                value={this.state.name}
+              	            />
+              	          </If>
+              	          <Input
+                type="textarea"
+                label="Value"
+                onChange={this.handleChange('str')}
+                value={this.state.str}
+                rows={8}
 	          />
 	          <FormGroup onChange={this.handleChange('view')}>
 	            <Radio name="view" value="string" checked={this.state.view === 'string'} inline>

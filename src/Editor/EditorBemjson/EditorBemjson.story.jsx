@@ -125,6 +125,34 @@ module.exports = ({ storiesOf, action }) => {
         onSubmit={action('onSubmit')}
       />
     })
+    .add('object', () => {
+      const value = {
+        int: 123,
+        float: 123.45,
+        string: 'string',
+      }
+      return <EditorBemjson
+        value={value}
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
+    })
+    .add('array', () => {
+      const value = [1,2,3,4,5]
+      return <EditorBemjson
+        value={value}
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
+    })
+    .add('string', () => {
+      const value = "test test"
+      return <EditorBemjson
+        value={value}
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
+    })
     .add('project', () => {
       return <EditorBemjson
         value={project}
