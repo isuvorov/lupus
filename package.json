@@ -127,7 +127,7 @@
       "transform-decorators-legacy"
     ]
   },
-  "eslintConfig123123123": {
+  "eslintConfigOld": {
     "parser": "babel-eslint",
     "extends": "airbnb",
     "globals": {
