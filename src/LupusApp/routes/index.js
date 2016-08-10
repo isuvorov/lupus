@@ -1,4 +1,4 @@
-import App from '../components/App'
+import App from '../containers/App'
 import Wrapper from './Wrapper'
 
 const project = {
