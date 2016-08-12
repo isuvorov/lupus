@@ -20,7 +20,6 @@ import AddIcon from 'react-icons/lib/fa/plus';
 import { autobind } from 'core-decorators'
 
 
-
 const schema = {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",

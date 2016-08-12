@@ -45,23 +45,16 @@ export default class LupusApp extends ReactApp {
           render(component, status = 200) {
             css = [];
             statusCode = status;
-            console.log('111');
             data.children = ReactDOM.renderToString(component);
-            console.log(222);
             data.style = css.join('');
             return true;
           },
         });
-
-        console.log(444);
-
         const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
-        console.log(555);
 
         res.status(statusCode);
         res.send(`<!doctype html>${html}`);
       } catch (err) {
-        console.log('!!!!!!!!!!!!');
         console.log(err)
         next(err);
       }
