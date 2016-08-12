@@ -1,4 +1,5 @@
-import App from './App'
+import Projects from './containers/Projects'
+import Auth from './containers/Auth'
 /* eslint-disable */
 const project = {
   "_id": "578752bbf1f2f80ae6e18765",
@@ -24,22 +25,34 @@ const project = {
 
 module.exports = ({ storiesOf, action }) => {
   const projects = [
-    // Object.assign({}, project, { name: 'chat.mgbeta.ru' }),
-    // Object.assign({}, project, { name: 'biz-accord.ru' }),
+    Object.assign({}, project, { name: 'chat.mgbeta.ru' }),
+    Object.assign({}, project, { name: 'biz-accord.ru' }),
     project,
   ]
   return storiesOf('App', module)
-    .add('Default', () => {
-      return <App
+    .add('Auth', () => (
+      <Auth
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
+    ))
+    .add('Projects', () => (
+      <Projects
+        onChange={action('onChange')}
+        onSubmit={action('onSubmit')}
+      />
+    ))
+    .add('Projects demo', () => (
+      <Projects
         projects={projects}
         onChange={action('onChange')}
         onSubmit={action('onSubmit')}
       />
-    })
-    .add('Api', () => {
-      const api = {}
-      return <AppContainer
-        api={api}
-      />
-    })
+    ))
+    // .add('Api', () => {
+    //   const api = {}
+    //   return <AppContainer
+    //     api={api}
+    //   />
+    // })
 }

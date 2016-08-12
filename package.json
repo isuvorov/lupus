@@ -98,6 +98,7 @@
     "react-transform-hmr": "^1.0.4",
     "redbox-react": "^1.2.6",
     "sass-loader": "^4.0.0",
+    "shortid": "^2.2.6",
     "sinon": "^2.0.0-pre",
     "stylelint": "^6.6.0",
     "stylelint-config-standard": "^9.0.0",
@@ -107,25 +108,6 @@
     "webpack": "^1.13.1",
     "webpack-hot-middleware": "^2.10.0",
     "webpack-middleware": "^1.5.1"
-  },
-  "babel": {
-    "presets": [
-      "react",
-      "node5",
-      "stage-0"
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          "rewire"
-        ]
-      }
-    },
-    "plugins": [
-      "jsx-control-statements",
-      "react-require",
-      "transform-decorators-legacy"
-    ]
   },
   "eslintConfigOld": {
     "parser": "babel-eslint",
@@ -173,7 +155,7 @@
     "deploy": "babel-node tools/run deploy",
     "render": "babel-node tools/run render",
     "start": "babel-node tools/run start",
-    "dev": "projectsDir=/Users/isuvorov/projects/remote babel-node tools/run start  | ./bunyan -o short -l trace",
+    "dev": "babel-node tools/run start  | ./bunyan -o short -l trace",
     "storybook": "start-storybook -p 9001",
     "install2": "find ./src/blocks/* -name package.json -maxdepth 1 -execdir npm install \\;"
   }
