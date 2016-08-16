@@ -1,6 +1,6 @@
 // import App from '../components/Projects'
 import Projects from '../containers/Projects'
-import Auth from '../containers/Auth'
+// import Auth from '../containers/Auth'
 import LoginPage from './LoginPage'
 import ErrorPage from './ErrorPage'
 import Wrapper from './Wrapper'

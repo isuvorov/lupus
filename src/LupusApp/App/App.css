@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
 body {
-  background: url("//mcheck.mgbeta.ru/images/bg3.jpg") center center / cover no-repeat fixed;
+  background-color: #f6f5f3 !important;
 }

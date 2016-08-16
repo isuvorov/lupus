@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 
-import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 
 import LoginForm from '../../containers/LoginForm'
+import cssm from '~/utils/CSSModules'
+const style = require('./LoginPage.css')
 
+@cssm(style)
 export default class LoginPage extends Component {
   // static defaultProps = {
   //   server: 'http://localhost:3000/api/',
@@ -31,20 +33,11 @@ export default class LoginPage extends Component {
   // }
   render() {
     return (
-      <Grid>
-        <Row>
-          <Col xs={6} md={4}>
-            login
-            <LoginForm
-              // username={this.state.username}
-              // password={this.state.password}
-              // onChange={this.handleChange}
-              // onAuth={this.handleAuth}
-            />
-
-          </Col>
-        </Row>
-      </Grid>
+      <Row styleName='page'>
+        <Col xs={6} md={4} styleName='centered'>
+          <LoginForm />
+        </Col>
+      </Row>
     );
   }
 }

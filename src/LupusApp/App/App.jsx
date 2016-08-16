@@ -1,5 +1,6 @@
 import { Component, PropTypes } from 'react'
 import { Provider, connect } from 'react-redux'
+import Grid from 'react-bootstrap/lib/Grid'
 import s from './App.css'
 // import MethodsApi from '../routes/methods';
 // const client = new MethodsApi({ base: 'http://localhost:8080/api/' });
@@ -81,7 +82,9 @@ export default class App extends Component {
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" />
       <Provider store={this.store}>
-        {this.props.children}
+        <Grid>
+          {this.props.children}
+        </Grid>
       </Provider>
     </div>
   }
