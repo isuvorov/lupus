@@ -4,7 +4,7 @@ import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 
-import LoginForm from '../../components/LoginForm'
+import LoginForm from '../../containers/LoginForm'
 
 export default class LoginPage extends Component {
   // static defaultProps = {

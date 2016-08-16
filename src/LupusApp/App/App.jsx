@@ -1,14 +1,16 @@
 import { Component, PropTypes } from 'react'
-import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
-import LoginForm from '../components/LoginForm'
 import s from './App.css'
+import MethodsApi from '../routes/methods';
+const client = new MethodsApi({ base: 'http://localhost:8080/api/' });
+import createStore from '../redux/create'
 
+// const store = createStore((state = {}, action) => {
+//   console.log('reducer');
+//   return state;
+// }, {test : 'test123123'})
 
-const store = createStore((state = {}, action) => {
-  console.log('reducer');
-  return state;
-}, {test : 'test123123'})
+const store = createStore(client, {});
 
 
 @connect((state) => {
