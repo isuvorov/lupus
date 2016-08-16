@@ -72,9 +72,9 @@ const schema = {
 import EditorBemjson from '../../../Editor/EditorBemjson';
 import Header from '../Header';
 import cssm from '~/utils/CSSModules';
-const style = require('./App.scss');
-
-@cssm(style)
+// const style = require('./App.scss');
+//
+// @cssm(style)
 export default class App extends Component {
   static propTypes = {
     projects: PropTypes.object,

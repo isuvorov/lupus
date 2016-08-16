@@ -4,7 +4,13 @@
 export default class ApiClient {
   constructor(params) {
     this.base = params.base
-    this.prefix = params.prefix
+    if (params.prefix) {
+      if (params.prefix[params.prefix.length - 1] === '/') {
+        this.prefix = params.prefix.substr(0, params.prefix.length - 1)
+      } else {
+        this.prefix = params.prefix
+      }
+    }
 
     if (params.auth) {
       this.setAuth(params.auth)
@@ -12,11 +18,21 @@ export default class ApiClient {
   }
 
   setAuth(authParams) {
-    return this.authPromise = this.authLogin(authParams)
+    this.authPromise = this.authLogin(authParams)
     .then(data => {
       this.user = data.user
       this.authToken = data.token
     })
+    return this.authPromise
+  }
+
+  authFetch(...args) {
+    if (!this.authPromise) {
+      return Promise.reject('!this.authPromise')
+    }
+    return this.authPromise.then(() => (
+      this.fetch(...args)
+    ))
   }
 
   authLogin(data) {
@@ -35,23 +51,23 @@ export default class ApiClient {
     })
   }
 
-
-  authFetch(...args) {
-    return this.authPromise.then(() => (
-      this.fetch(...args)
-    ))
+  onError(err) {
+    console.log('pack.err', err)
+    throw err
   }
 
-  fetch(path, options = {}) {
-    const prefix = options.prefix || this.prefix
+  fetch(path, params = {}) {
+    const options = Object.assign({}, params)
+    const prefix = options.prefix || this.prefix || ''
     let url
     if (path.substr(0, 5) === 'http:' || path.substr(0, 6) === 'https:') {
       url = path
     } else {
-      if (path[0] === '/') {
-        url = this.base + path
+      const base = this.base || ''
+      if (path[0] === '/' || !prefix) {
+        url = [base, path].join('/')
       } else {
-        url = this.base + prefix  + '/' + path
+        url = [base, prefix, path].join('/')
       }
     }
     // if (_.isPlainObject(options.body)) {
@@ -65,15 +81,13 @@ export default class ApiClient {
       options.headers['Authorization'] = 'Bearer ' + this.authToken
 
 
-    return fetch(url, options) ///
+    return fetch(url, options)
     .then(res => {
       return res.json()
     })
     .then(pack => {
       if(pack.err) {
-        console.log('pack.err', pack.err)
-        // console.error ? console.error(pack.err) : console.log(pack.err)
-        throw pack.err
+        return this.onError(pack.err, pack)
       }
       return pack.data
     })

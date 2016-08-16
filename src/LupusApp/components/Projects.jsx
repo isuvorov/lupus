@@ -1,30 +1,31 @@
 import React, { Component } from 'react';
 
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Button from 'react-bootstrap/lib/Button';
+import PanelGroup from 'react-bootstrap/lib/PanelGroup';
+import Panel from 'react-bootstrap/lib/Panel';
 
-import AddIcon from 'react-icons/lib/fa/plus';
-import RefreshIcon from 'react-icons/lib/fa/refresh';
 
-export default class Projects extends Component {
+import { autobind } from 'core-decorators';
+
+import ProjectList from './ProjectList';
+
+export default class LeftMenu extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      activeKey: '1',
+    }
+  }
+  @autobind
+  handleSelect(activeKey) {
+    this.setState({ activeKey });
   }
   render() {
-    return (
-      <Nav bsStyle='pills' styleName='inner' stacked>
-        <Button onClick={this.props.refresh}><RefreshIcon /> Обновить список</Button>
-        {this.props.projects.map((prj, index) => (
-          <NavItem
-            onClick={this.props.setActive.bind(this, index)}
-            active={index === this.props.active}
-          >
-          {prj.name}
-          </NavItem>
-        ))}
-        <Button onClick={this.props.openModal}><AddIcon /> Добавить проект</Button>
-      </Nav>
-    );
+    const { activeKey } = this.state
+    return <PanelGroup activeKey={activeKey} onSelect={this.handleSelect} accordion>
+      <Panel header="Panel 1" eventKey="1">
+        <ProjectList {...this.props} />
+      </Panel>
+      <Panel header="Panel 2" eventKey="2">Panel 2 content</Panel>
+    </PanelGroup>
   }
 }

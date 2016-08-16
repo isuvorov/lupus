@@ -55,7 +55,7 @@ export default class LupusApp extends ReactApp {
         res.status(statusCode);
         res.send(`<!doctype html>${html}`);
       } catch (err) {
-        console.log(err)
+        console.log('err', err)
         next(err);
       }
     }

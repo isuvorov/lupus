@@ -17,7 +17,7 @@ import Api from '../routes/methods';
 
 export default class App extends Component {
   static defaultProps = {
-    server: 'http://localhost:3000/api/',
+    server: 'http://localhost:8080/api/',
   }
   constructor(props) {
     super(props);
@@ -125,7 +125,7 @@ export default class App extends Component {
         action: this.testMethod,
       },
     ]
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <main styleName='root'>
         {/* <Header /> */}

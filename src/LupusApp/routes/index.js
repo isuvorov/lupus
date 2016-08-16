@@ -1,18 +1,13 @@
-import App from '../containers/App'
+// import App from '../components/Projects'
+import Projects from '../containers/Projects'
+import Auth from '../containers/Auth'
+import LoginPage from './LoginPage'
+import ErrorPage from './ErrorPage'
 import Wrapper from './Wrapper'
 
-const home = {
-  path: '/',
+import { Provider } from 'react-redux'
 
-  children: [
-  ],
-  async action() {
-    return <div>
-      123123
-      <App />
-    </div>
-  },
-}
+import App from '../App'
 
 
 export default {
@@ -20,22 +15,61 @@ export default {
   path: '/',
 
   children: [
-    home,
-    // contact,
-    // login,
-    // register,
-    // content,
-    // error,
+    // {
+    //   path: '/auth',
+    //   action() {
+    //     return <Auth />
+    //   },
+    // },
+    {
+      path: '/login',
+      action() {
+        return <LoginPage />
+      },
+    },
+    {
+      path: '/projects/:name',
+      action(ctx, {name}) {
+        return <div>projects {name}</div>
+      },
+    },
+    {
+      path: '/projects',
+      async action() {
+        return <div>
+          <Projects />
+        </div>
+      },
+    },
+    {
+      path: '/',
+      action() {
+        return <div>Home</div>
+      },
+    },
+    {
+      path: '/error',
+      action({ render, context, error }) {
+        return render(
+          <App context={context} error={error}>
+            <ErrorPage error={error} />
+          </App>,
+          error.status || 500
+        );
+      },
+    },
   ],
 
   async action({ next, render, context }) {
+    console.log('action start');
     const component = await next();
+    if (component === undefined) return component;
+    // const component = await next();
+    console.log('component', component);
     return render(
-      <Wrapper context={context}>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" />
+      <App context={context}>
         {component}
-      </Wrapper>
+      </App>
     );
   },
 
