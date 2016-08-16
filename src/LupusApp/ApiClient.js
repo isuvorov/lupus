@@ -1,6 +1,6 @@
-import ApiClient from '../../ApiClient'
+import _ApiClient from './_ApiClient'
 
-export default class MethodsApi extends ApiClient {
+export default class ApiClient extends _ApiClient {
   getProject(projectID) {
     return this.fetch(`projects/${projectID}`, {
       method: 'GET',

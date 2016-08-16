@@ -61,11 +61,9 @@ export default {
   ],
 
   async action({ next, render, context }) {
-    console.log('action start');
     const component = await next();
     if (component === undefined) return component;
     // const component = await next();
-    console.log('component', component);
     return render(
       <App context={context}>
         {component}

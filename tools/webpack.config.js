@@ -283,7 +283,7 @@ const clientConfig = extend(true, {}, config, {
 
     // Define free variables
     // https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-    new webpack.DefinePlugin({ ...GLOBALS, 'process.env.BROWSER': true }),
+    new webpack.DefinePlugin({ ...GLOBALS, 'process.env.BROWSER': true, '__CLIENT__': true, '__SERVER__': false }),
 
     // Emit a file with assets paths
     // https://github.com/sporto/assets-webpack-plugin#options
@@ -353,7 +353,7 @@ const serverConfig = extend(true, {}, config, {
 
     // Define free variables
     // https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-    new webpack.DefinePlugin({ ...GLOBALS, 'process.env.BROWSER': false }),
+    new webpack.DefinePlugin({ ...GLOBALS, 'process.env.BROWSER': false, '__CLIENT__': false, '__SERVER__': true }),
 
     // Adds a banner to the top of each generated chunk
     // https://webpack.github.io/docs/list-of-plugins.html#bannerplugin

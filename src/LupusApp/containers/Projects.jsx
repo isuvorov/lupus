@@ -13,7 +13,7 @@ import Projects from '../components/Projects';
 import Menu from '../components/Menu';
 import Header from '../components/Header';
 import Tasks from '../components/Tasks';
-import Api from '../routes/methods';
+import Api from '../ApiClient';
 
 export default class App extends Component {
   static defaultProps = {

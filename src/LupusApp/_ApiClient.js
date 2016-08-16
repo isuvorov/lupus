@@ -36,6 +36,7 @@ export default class ApiClient {
   }
 
   authLogin(data) {
+    console.log('data', data);
     return this.fetch('/auth/login', {
       prefix: '',
       method: 'POST',

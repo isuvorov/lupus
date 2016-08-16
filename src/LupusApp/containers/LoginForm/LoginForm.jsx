@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
 import Thumbnail from 'react-bootstrap/lib/Thumbnail';
@@ -16,8 +17,7 @@ import style from './LoginForm.css';
 
 @connect(
   state => {
-    console.log(state);
-    return { user: state.auth.user }
+    return { user: state.user}
   },
   authActions
 )
@@ -30,10 +30,11 @@ export default class LoginForm extends Component {
   }
   handleSubmit = (event) => {
     event.preventDefault();
-    let { username, password } = this.refs;
+    const username = ReactDOM.findDOMNode(this.refs.username).value
+    const password = ReactDOM.findDOMNode(this.refs.password).value
     this.props.login(username, password);
-    username = '';
-    password = '';
+    ReactDOM.findDOMNode(this.refs.username).value = '';
+    ReactDOM.findDOMNode(this.refs.password).value = '';
   }
   render() {
     if (!this.props.user) {
@@ -75,7 +76,9 @@ export default class LoginForm extends Component {
       );
     } else {
       return (
-        <div>123</div>
+        <div>123
+          {this.props.user}
+        </div>
       );
     }
   }

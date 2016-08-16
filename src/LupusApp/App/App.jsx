@@ -1,33 +1,31 @@
 import { Component, PropTypes } from 'react'
 import { Provider, connect } from 'react-redux'
 import s from './App.css'
-import MethodsApi from '../routes/methods';
-const client = new MethodsApi({ base: 'http://localhost:8080/api/' });
-import createStore from '../redux/create'
+// import MethodsApi from '../routes/methods';
+// const client = new MethodsApi({ base: 'http://localhost:8080/api/' });
+import createStore from '../redux/createStore'
+import ApiClient from '../ApiClient'
 
 // const store = createStore((state = {}, action) => {
 //   console.log('reducer');
 //   return state;
 // }, {test : 'test123123'})
+// const store = createStore(_browserHistory, client, window.__data);
 
-const store = createStore(client, {});
-
-
-@connect((state) => {
-  return {
-    test: state.test,
-    asdasd: 12312312,
-  }
-})
-class Test extends Component {
-  render() {
-    return <div>
-      {this.props.test}
-      TEST
-      {this.props.asdasd}
-    </div>
-  }
-}
+// @connect((state) => {
+//   return {
+//     state: state,
+//   }
+// })
+// class Test extends Component {
+//   render() {
+//     return <div>
+//       {this.props.test}
+//       TEST
+//       {this.props.asdasd}
+//     </div>
+//   }
+// }
 export default class App extends Component {
 
   static propTypes = {
@@ -55,6 +53,21 @@ export default class App extends Component {
     };
   }
   componentWillMount() {
+    const initialStore = {
+      test : 'test123123',
+      // auth: {
+      //   user: "qweqweqwe",
+      // },
+    }
+
+    const client = new ApiClient({ base: 'http://localhost:8080/api/' });
+
+    if(__CLIENT__) {
+      this.store = createStore(window.__data || initialStore, client);
+    } else {
+      this.store = createStore(initialStore, client);
+    }
+
     const { insertCss } = this.props.context;
     this.removeCss = insertCss(s);
   }
@@ -64,11 +77,10 @@ export default class App extends Component {
   }
 
   render() {
-
     return <div className='root'>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" />
-      <Provider store={store}>
+      <Provider store={this.store}>
         {this.props.children}
       </Provider>
     </div>
