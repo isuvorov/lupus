@@ -6,20 +6,19 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 
 export default function Header() {
   return (
-    <Navbar inverse fixedTop>
+    <Navbar staticTop>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="#">Lupus</a>
+          <a href="/">Lupus</a>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
-          <NavItem eventKey={1} href="#">Link</NavItem>
-          <NavItem eventKey={2} href="#">Link</NavItem>
+          <NavItem eventKey={1} href="/projects">Проекты</NavItem>
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="#">Link Right</NavItem>
+          <NavItem eventKey={1} href="/login">Войти</NavItem>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

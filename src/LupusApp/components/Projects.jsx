@@ -22,7 +22,7 @@ export default class LeftMenu extends Component {
   render() {
     const { activeKey } = this.state
     return <PanelGroup activeKey={activeKey} onSelect={this.handleSelect} accordion>
-      <Panel header="Panel 1" eventKey="1">
+      <Panel header="Список проектов" eventKey="1">
         <ProjectList {...this.props} />
       </Panel>
       <Panel header="Panel 2" eventKey="2">Panel 2 content</Panel>

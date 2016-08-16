@@ -1,0 +1,33 @@
+.submenu {
+  position: absolute !important;
+  width: 100%;
+}
+.fixed {
+  position: fixed !important;
+  border-radius: 0 !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+}
+@media (min-width: 768px) {
+  .fixed {
+    width: 470px;
+    left: inherit;
+    border-radius: 0 0 4px 4px !important;
+  }
+}
+@media (min-width: 992px) {
+  .fixed {
+    width: 697px;
+    left: inherit;
+    border-radius: 0 0 4px 4px !important;
+  }
+}
+@media (min-width: 1200px) {
+  .fixed {
+    width: 847px;
+    left: inherit;
+    border-radius: 0 0 4px 4px !important;
+  }
+}

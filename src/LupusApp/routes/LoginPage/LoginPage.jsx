@@ -33,7 +33,7 @@ export default class LoginPage extends Component {
   // }
   render() {
     return (
-      <Row styleName='page'>
+      <Row>
         <Col xs={6} md={4} styleName='centered'>
           <LoginForm />
         </Col>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { autobind } from 'core-decorators';
 import pick from 'lodash/pick';
 
-import Grid from 'react-bootstrap/lib/Grid';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -11,7 +10,6 @@ import EditorBemjson from '../../Editor/EditorBemjson';
 import schema from '../components/schema';
 import Projects from '../components/Projects';
 import Menu from '../components/Menu';
-import Header from '../components/Header';
 import Tasks from '../components/Tasks';
 import Api from '../ApiClient';
 
@@ -23,6 +21,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       active: null,
+      fixed: false,
       newProject: '',
       showModal: false,
       projects: [],
@@ -32,6 +31,13 @@ export default class App extends Component {
   }
   componentDidMount() {
     this.refreshProjects();
+    document.addEventListener('scroll', () => {
+      if (document.body.scrollTop >= 50 && !this.state.fixed) {
+        this.setState({ fixed: true })
+      } else if (document.body.scrollTop < 50 && this.state.fixed) {
+        this.setState({ fixed: false })
+      }
+    })
   }
   setActive = (index) => {
     const active = index;
@@ -125,43 +131,16 @@ export default class App extends Component {
         action: this.testMethod,
       },
     ]
-    // console.log(this.state);
     return (
-      <main styleName='root'>
-        {/* <Header /> */}
-        <Grid>
-          <Row>
-            <Col md={2} sm={3}>
-              <Projects
-                refresh={this.refreshProjects}
-                projects={this.state.projects}
-                setActive={this.setActive}
-                active={this.state.active}
-                openModal={this.openModal}
-              />
-            </Col>
-            <Col md={10} sm={9}>
-              {Object.keys(project).length > 0 && <div>
-                <Menu
-                  title={project.name}
-                  buttons={buttons}
-                  onSave={this.handleSave}
-                />
-                <Tasks
-                  getWebhook={getWebhook}
-                  tasks={tasks}
-                />
-                <div styleName='inner'>
-                  <EditorBemjson
-                    value={project}
-                    schema={schema}
-                    onChange={this.handleChangeProject}
-                    onSubmit={this.handleSubmit}
-                  />
-                </div>
-              </div>}
-            </Col>
-          </Row>
+      <Row>
+        <Col md={3} sm={4}>
+          <Projects
+            refresh={this.refreshProjects}
+            projects={this.state.projects}
+            setActive={this.setActive}
+            active={this.state.active}
+            openModal={this.openModal}
+          />
           <CreateProject
             showModal={this.state.showModal}
             closeModal={this.closeModal}
@@ -169,8 +148,35 @@ export default class App extends Component {
             onChange={this.handleChangeNewProject}
             onSubmit={this.newProject}
           />
-        </Grid>
-      </main>
+        </Col>
+        <Col md={9} sm={8}>
+          {Object.keys(project).length > 0 && <div style={{ position: 'relative' }}>
+            <Menu
+              fixed={this.state.fixed}
+              title={project.name}
+              buttons={buttons}
+              onSave={this.handleSave}
+            />
+            <div style={{ paddingTop: 70 }}>
+              <Tasks
+                getWebhook={getWebhook}
+                tasks={tasks}
+              />
+              <div styleName='inner'>
+                <EditorBemjson
+                  value={project}
+                  schema={schema}
+                  onChange={this.handleChangeProject}
+                  onSubmit={this.handleSubmit}
+                />
+              </div>
+            </div>
+          </div> || <div>
+            <h1>Ничего не выбрано</h1>
+            <h4>Выберите проект из списка</h4>
+          </div>}
+        </Col>
+      </Row>
     );
   }
 }

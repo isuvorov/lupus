@@ -6,6 +6,7 @@ import s from './App.css'
 // const client = new MethodsApi({ base: 'http://localhost:8080/api/' });
 import createStore from '../redux/createStore'
 import ApiClient from '../ApiClient'
+import Header from '../components/Header'
 
 // const store = createStore((state = {}, action) => {
 //   console.log('reducer');
@@ -80,7 +81,8 @@ export default class App extends Component {
   render() {
     return <div className='root'>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" />
+      {/* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css" /> */}
+      <Header />
       <Provider store={this.store}>
         <Grid>
           {this.props.children}
