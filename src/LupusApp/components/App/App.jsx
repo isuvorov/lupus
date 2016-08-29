@@ -71,7 +71,7 @@ const schema = {
 
 import EditorBemjson from '../../../Editor/EditorBemjson';
 import Header from '../Header';
-import cssm from '~/utils/CSSModules';
+import cssm from 'lego-starter-kit/utils/CSSModules';
 // const style = require('./App.scss');
 //
 // @cssm(style)

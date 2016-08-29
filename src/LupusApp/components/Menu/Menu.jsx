@@ -8,7 +8,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 
-import cssm from '~/utils/CSSModules';
+import cssm from 'lego-starter-kit/utils/CSSModules';
 const style = require('./Menu.css');
 
 @cssm(style)

@@ -1,8 +1,9 @@
 // import App from '../components/Projects'
-import Projects from '../containers/Projects'
+// import Projects from '../containers/Projects'
 // import Auth from '../containers/Auth'
 import LoginPage from './LoginPage'
 import ErrorPage from './ErrorPage'
+import ErrorPaProjectsPagege from './ProjectsPage'
 import Wrapper from './Wrapper'
 
 import { Provider } from 'react-redux'
@@ -37,14 +38,15 @@ export default {
       path: '/projects',
       async action() {
         return <div>
-          <Projects />
+          projects
+          {/* <ProjectsPage /> */}
         </div>
       },
     },
     {
       path: '/',
       action() {
-        return <div>Home</div>
+        return <div><h1>The Lupus</h1></div>
       },
     },
     {

@@ -3,7 +3,7 @@ import 'babel-polyfill';
 require('babel-runtime/core-js/promise').default = require('bluebird');
 
 import config from './config'
-import logger from 'babel!lego-starter-kit/src/utils/logger'
+import logger from 'lego-starter-kit/utils/logger'
 import App from './LupusApp'
 
 const ctx = {

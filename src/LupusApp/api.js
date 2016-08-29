@@ -1,4 +1,4 @@
-import asyncRouter from '~/utils/AsyncRouter';
+import asyncRouter from 'lego-starter-kit/utils/AsyncRouter';
 
 export default (ctx) => {
   //qwe

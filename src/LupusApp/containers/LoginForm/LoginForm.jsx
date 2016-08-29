@@ -12,7 +12,7 @@ import MailIcon from 'react-icons/lib/fa/envelope';
 import LockIcon from 'react-icons/lib/fa/lock';
 
 import * as authActions from '../../redux/modules/auth';
-import cssm from '~/utils/CSSModules';
+import cssm from 'lego-starter-kit/utils/CSSModules';
 import style from './LoginForm.css';
 
 @connect(
@@ -40,8 +40,7 @@ export default class LoginForm extends Component {
     if (!this.props.user) {
       return (
         <Thumbnail styleName='centered'>
-          <h3>Lupus</h3>
-          <p>Авторизация</p>
+          <h3>Авторизация</h3>
           <form onSubmit={this.handleSubmit}>
             <FormGroup>
               <InputGroup>
@@ -68,7 +67,7 @@ export default class LoginForm extends Component {
                 onClick={this.handleSubmit}
                 bsStyle='primary'
               >
-                Авторизоваться
+                Войти
               </Button>
             </p>
           </form>

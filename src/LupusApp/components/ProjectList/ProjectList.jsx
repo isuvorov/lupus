@@ -15,7 +15,8 @@ export class ProjectList extends Component {
       <Button onClick={this.props.refresh}><RefreshIcon /> Обновить список</Button>
       {this.props.projects.map((prj, index) => (
         <NavItem
-          onClick={this.props.setActive.bind(this, index)}
+          href='http://google.com'
+          // onClick={this.props.setActive.bind(this, index)}
           active={index === this.props.active}
         >
         {prj.name}

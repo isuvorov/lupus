@@ -9,7 +9,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import MailIcon from 'react-icons/lib/fa/envelope';
 import LockIcon from 'react-icons/lib/fa/lock';
 
-import cssm from '~/utils/CSSModules';
+import cssm from 'lego-starter-kit/utils/CSSModules';
 const style = require('./Login.scss');
 
 @cssm(style)

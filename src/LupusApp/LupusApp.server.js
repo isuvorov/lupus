@@ -1,4 +1,4 @@
-import ReactApp from 'babel!lego-starter-kit/src/ReactApp'
+import ReactApp from 'lego-starter-kit/ReactApp'
 import api from './api'
 import routes from './routes'
 import assets from './assets'; // eslint-disable-line import/no-unresolved
@@ -22,7 +22,9 @@ export default class LupusApp extends ReactApp {
     // this.app.get('/', (req, res) => {
     //   return res.send(this.renderHtml(<div>Lupus home</div>))
     // })
-    this.app.use('/api', api(this))
+
+    this.app.use('/api/auth', this.acl(), this.getAuthApi(this))
+    this.app.use('/api', this.acl(), api(this))
     this.app.get('*', this.applyUniversalRouter(routes, {script: assets.main.js}));
     this.useStaticPublic(__dirname + '/../../public')
   }

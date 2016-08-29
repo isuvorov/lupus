@@ -5,13 +5,13 @@ import pick from 'lodash/pick';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
-import CreateProject from '../components/Modals/CreateProject';
-import EditorBemjson from '../../Editor/EditorBemjson';
-import schema from '../components/schema';
-import Projects from '../components/Projects';
-import Menu from '../components/Menu';
-import Tasks from '../components/Tasks';
-import Api from '../ApiClient';
+import CreateProject from '../../components/Modals/CreateProject';
+import EditorBemjson from '../../../Editor/EditorBemjson';
+import schema from '../../components/schema';
+import Projects from '../../components/Projects';
+import Menu from '../../components/Menu';
+import Tasks from '../../components/Tasks';
+import Api from '../../ApiClient';
 
 export default class App extends Component {
   static defaultProps = {
@@ -30,6 +30,7 @@ export default class App extends Component {
     this.api = new Api({ base: this.props.server })
   }
   componentDidMount() {
+    console.log('projects componentDidMount');
     this.refreshProjects();
     document.addEventListener('scroll', () => {
       if (document.body.scrollTop >= 50 && !this.state.fixed) {

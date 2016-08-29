@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 
 import LoginForm from '../../containers/LoginForm'
-import cssm from '~/utils/CSSModules'
+import cssm from 'lego-starter-kit/utils/CSSModules'
 const style = require('./LoginPage.css')
 
 @cssm(style)

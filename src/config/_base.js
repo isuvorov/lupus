@@ -14,6 +14,20 @@ const config = {
   projectsDir: process.env.projectsDir || '/Users/isuvorov/projects/remote',
 
 
+  mail: {
+    transport: {
+      host: 'smtp.yandex.ru',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'me@mgbeta.ru',
+        pass: 'fairymetale',
+      },
+    },
+    options: {
+      from: '"Lupus" <me@mgbeta.ru>',
+    },
+  },
   db: {
     uri: 'mongodb://s2.mgbeta.ru:10098/lupus',
     options: {},

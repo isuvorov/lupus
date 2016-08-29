@@ -6,6 +6,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE.txt file in the root directory of this source tree.
  */
+import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 import extend from 'extend';
@@ -57,14 +58,12 @@ const config = {
       {
         test: /\.(jsx|js)?$/,
         loader: 'babel-loader',
-        exclude: /qwe/,
         include: [
-          path.resolve(__dirname, '../node_modules/git-repository/src'),
-          path.resolve(__dirname, '../node_modules/lego-starter-kit/src'),
+          fs.realpathSync(__dirname + '/../node_modules/lego-starter-kit/src'),
           path.resolve(__dirname, '../node_modules/react-routing/src'),
           path.resolve(__dirname, '../src'),
         ],
-        // exclude: /node_modules/,
+        exclude: /node_modules/,
         query: {
           // https://github.com/babel/babel-loader#options
           cacheDirectory: DEBUG,
@@ -185,7 +184,7 @@ const config = {
     alias: {
       '#': path.resolve(__dirname, '../src'),
       'lupus': path.resolve(__dirname, '../src'),
-      '~': path.resolve(__dirname, '../node_modules/lego-starter-kit/src'),
+      'lego-starter-kit': path.resolve(__dirname, '../node_modules/lego-starter-kit/src'),
     },
     modulesDirectories: ['node_modules'],
     extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.json', '.coffee'],
@@ -344,6 +343,7 @@ const serverConfig = extend(true, {}, config, {
       const isExternal =
         request.match(/^[@a-z][a-z\/\.\-0-9]*$/i) &&
         !request.match(/^react-routing/) &&
+        !request.match(/^lego-starter-kit/) &&
         !context.match(/[\\/]react-routing/);
       cb(null, Boolean(isExternal));
     },

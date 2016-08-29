@@ -12,14 +12,14 @@ import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
 import UniversalRouter from 'universal-router';
 import routes from './routes';
-import history from '~/utils/history';
+import history from 'lego-starter-kit/utils/history';
 import { readState, saveState } from 'history/lib/DOMStateStorage';
 import {
   addEventListener,
   removeEventListener,
   windowScrollX,
   windowScrollY,
-} from '~/utils/DOMUtils';
+} from 'lego-starter-kit/utils/DOMUtils';
 
 const context = {
   insertCss: (...styles) => {
@@ -65,7 +65,7 @@ let renderComplete = (state, callback) => {
 
     // Google Analytics tracking. Don't send 'pageview' event after
     // the initial rendering, as it was already sent
-    window.ga('send', 'pageview');
+    window.ga && window.ga('send', 'pageview');
 
     callback(true);
   };
